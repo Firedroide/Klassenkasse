@@ -1,0 +1,35 @@
+# Partent Project
+/.settings
+/target
+
+/bin
+
+/.project
+/.classpath
+
+# Common
+/common/.settings
+/common/target
+
+/common/bin
+
+/common/.project
+/common/.classpath
+
+# Client
+/client/.settings
+/client/target
+
+/client/bin
+
+/client/.project
+/client/.classpath
+
+# Server
+/server/.settings
+/server/target
+
+/server/bin
+
+/server/.project
+/server/.classpath
