@@ -105,6 +105,11 @@ public class FakeHost implements Host {
 	}
 
 	@Override
+	public Map<Integer, User> getUsersWithPayment(int paymentId) {
+		return Collections.emptyMap();
+	}
+
+	@Override
 	public User getUserById(int userId) {
 		return null;
 	}

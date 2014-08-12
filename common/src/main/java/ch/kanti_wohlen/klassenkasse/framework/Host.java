@@ -53,6 +53,8 @@ public interface Host {
 
 	@NonNull Map<Integer, User> getUsersByClass(int classId);
 
+	@NonNull Map<Integer, User> getUsersWithPayment(int paymentId);
+
 	@Nullable User getUserById(int userId);
 
 	void updateUser(@NonNull User user, boolean removed);
