@@ -1,18 +1,19 @@
 # Partent Project
-/.settings
+/bin
+/database
 /target
 
-/bin
+/derby.log
 
+/.settings
 /.project
 /.classpath
 
 # Common
-/common/.settings
+/common/bin
 /common/target
 
-/common/bin
-
+/common/.settings
 /common/.project
 /common/.classpath
 
@@ -26,10 +27,20 @@
 /client/.classpath
 
 # Server
-/server/.settings
+/server/bin
+/server/database
 /server/target
 
-/server/bin
+/server/derby.log
 
+/server/.settings
 /server/.project
 /server/.classpath
+
+# Webstart
+/webstart/bin
+/webstart/target
+
+/webstart/.settings
+/webstart/.project
+/webstart/.classpath
