@@ -3,8 +3,10 @@ package ch.kanti_wohlen.klassenkasse.util;
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
- * Represents a certain amount of money.<br>
+ * Represents a certain amount of money.
+ * <p>
  * This class is immutable and checks for long overflows.
+ * </p>
  * 
  * @author Roger Baumgartner
  */
@@ -15,10 +17,11 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	private final long value;
 
 	/**
-	 * Creates a {@code MonetaryValue} by adding up francs and cents.<br>
-	 * Francs can be positive or negative, cents should always be positive.<br>
-	 * <br>
+	 * Creates a {@code MonetaryValue} by adding up francs and cents.
+	 * Francs can be positive or negative, cents should always be positive.
+	 * <p>
 	 * <b>Examples:</b>
+	 * </p>
 	 * <ul>
 	 * <li>{@code new Money(20, 10)} becomes {@code 20.10}</li>
 	 * <li>{@code new Money(20, 120)} becomes {@code 21.20}</li>
@@ -28,13 +31,10 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	 * </ul>
 	 * 
 	 * @param francs
-	 *            The francs for the {@code MonetaryValue}. Can be positive or
-	 *            negative.
+	 *            The francs for the {@code MonetaryValue}. Can be positive or negative.
 	 * @param cents
-	 *            The cents for this {@code MonetaryValue}. Should always be
-	 *            positive.<br>
-	 *            Values greater than 99 or smaller than 0 will raise no
-	 *            exception.
+	 *            The cents for this {@code MonetaryValue}. Should always be positive.<br>
+	 *            Values greater than 99 or smaller than 0 will raise no exception.
 	 * @throws ArithmeticException
 	 *             if a long overflow occurs
 	 */
@@ -50,8 +50,7 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 		}
 
 		long frCents = francs * 100;
-		long adjCents = francs < 0 ? -cents : cents; // -20 and 10 should result
-														// in -20.10, not -19.90
+		long adjCents = francs < 0 ? -cents : cents; // -20 and 10 should result in -20.10, not -19.90
 
 		// Check for addition overflow
 		if (frCents > 0 ? adjCents > Long.MAX_VALUE - frCents : adjCents < Long.MIN_VALUE - frCents) {
@@ -74,9 +73,10 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	}
 
 	/**
-	 * Returns only the whole francs of this {@code MonetaryValue}.<br>
-	 * <br>
+	 * Returns only the whole francs of this {@code MonetaryValue}.
+	 * <p>
 	 * <b>Examples:</b>
+	 * </p>
 	 * <ul>
 	 * <li>{@code 10.90} becomes {@code 10}</li>
 	 * <li>{@code 10.00} becomes {@code 10}</li>
@@ -91,10 +91,11 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	}
 
 	/**
-	 * Returns only the cents part of this {@code MonetaryValue}.<br>
-	 * Will become negative if the whole expression is negative.<br>
-	 * <br>
+	 * Returns only the cents part of this {@code MonetaryValue}.
+	 * Will become negative if the whole expression is negative.
+	 * <p>
 	 * <b>Examples:</b>
+	 * </p>
 	 * <ul>
 	 * <li>{@code 10.90} becomes {@code 90}</li>
 	 * <li>{@code 10.00} becomes {@code 0}</li>
@@ -109,10 +110,10 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	}
 
 	/**
-	 * Returns the value got by converting this {@code MonetaryValue} to cents
-	 * only.<br>
-	 * <br>
+	 * Returns the value got by converting this {@code MonetaryValue} to cents only.
+	 * <p>
 	 * <b>Examples:</b>
+	 * </p>
 	 * <ul>
 	 * <li>{@code 10.90} becomes {@code 1090}</li>
 	 * <li>{@code 10.00} becomes {@code 1000}</li>
@@ -138,7 +139,9 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	}
 
 	/**
-	 * @return the negative amount of this {@code MonetaryValue}
+	 * Calculates the negative value of this {@code MonetaryValue}.
+	 * 
+	 * @return the negative value of this {@code MonetaryValue}
 	 * @throws ArithmeticException
 	 *             if the value is {@code Long.MIN_VALUE}
 	 */
@@ -155,9 +158,10 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 
 	/**
 	 * Calculates the absolute value of this {@code MonetaryValue}.
-	 * If this {@code MonetaryValue} is positive or zero, the same object is
-	 * returned.
-	 * If it is negative, the negated value is returned.
+	 * <p>
+	 * If this {@code MonetaryValue} is positive or zero, the same object is returned. If it is negative, the negated
+	 * value is returned.
+	 * </p>
 	 * 
 	 * @return the absolute value of this {@code MonetaryValue}.
 	 */
@@ -173,9 +177,9 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	 * Adds two {@code MonetaryValue}s together.
 	 * 
 	 * @param other
-	 *            The other {@code MonetaryValue} to add to this value, cannot
-	 *            be null
+	 *            The other {@code MonetaryValue} to add to this value, cannot be null
 	 * @return A {@code MonetaryValue} representing the sum of the two values
+	 * 
 	 * @throws ArithmeticException
 	 *             if a long overflow occurs
 	 * @throws NullPointerException
@@ -213,13 +217,12 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	}
 
 	/**
-	 * Sums the values of multiple {@code MonetaryValue}s together
+	 * Sums the values of multiple {@code MonetaryValue}s together.
 	 * 
 	 * @param values
 	 *            The {@code MonetaryValue}s to be added together. May be null
 	 *            or an empty array
-	 * @return the sum of all {@code MonetaryValue}s or a value of 0 if
-	 *         {@code values} is null or empty
+	 * @return the sum of all {@code MonetaryValue}s or a value of 0 if {@code values} is null or empty
 	 * @throws ArithmeticException
 	 *             if a long overflow occurs
 	 */
