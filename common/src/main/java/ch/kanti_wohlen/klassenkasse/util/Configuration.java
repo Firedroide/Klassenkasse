@@ -238,7 +238,7 @@ public class Configuration {
 		}
 	}
 
-	public @Nullable Object set(String key, Object value) {
+	public @Nullable Object set(String key, @Nullable Object value) {
 		if (defaultsBacked && !defaults.containsKey(key)) {
 			throw new IllegalConfigurationAccessException("");
 		}
@@ -247,15 +247,18 @@ public class Configuration {
 		}
 
 		Object previous = remove(key);
-		properties.put(key, value);
+		if (value != null) properties.put(key, value);
 
 		return previous;
 	}
 
-	public @Nullable Object setMap(String key, Map<String, Object> value) {
+	public @Nullable Object setMap(String key, @Nullable Map<String, Object> value) {
 		Object previous = remove(key);
-		properties.put(key, value);
-		resolveNestedMaps(properties, key, value);
+
+		if (value != null) {
+			properties.put(key, value);
+			resolveNestedMaps(properties, key, value);
+		}
 
 		return previous;
 	}
