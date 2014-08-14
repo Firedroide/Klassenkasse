@@ -294,11 +294,24 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 		return Long.compare(value, o.value);
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder out = new StringBuilder("Fr. ");
+	/**
+	 * Gets a {@code String} representing this value.
+	 * 
+	 * @param prefix
+	 *            whether the currency prefix (i.e. {@code Fr.}) should be included
+	 * @return the amount converted to a {@code String}
+	 */
+	public String getAmountString(boolean prefix) {
+		StringBuilder out = new StringBuilder();
+		if (prefix) out.append("Fr. ");
+
 		out.append(getFrancs()).append(".");
 		out.append(String.format("%02d", getCents()));
 		return out.toString();
+	}
+
+	@Override
+	public String toString() {
+		return getAmountString(true);
 	}
 }
