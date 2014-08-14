@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -24,6 +25,7 @@ import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 
 import ch.kanti_wohlen.klassenkasse.util.IllegalConfigurationAccessException;
 
+@NonNullByDefault
 public class Configuration {
 
 	private final String name;
@@ -34,7 +36,7 @@ public class Configuration {
 	private final Yaml yaml;
 
 	public Configuration(String name, boolean defaultsBacked) {
-		if (name == null || name.isEmpty()) throw new IllegalArgumentException("name was null or empty");
+		if (name.isEmpty()) throw new IllegalArgumentException("name was null or empty");
 
 		this.name = name;
 		this.defaultsBacked = defaultsBacked;
@@ -45,11 +47,13 @@ public class Configuration {
 		options.setDefaultScalarStyle(ScalarStyle.PLAIN);
 		yaml = new Yaml(options);
 
+		defaults = new HashMap<>();
+		properties = new HashMap<>();
+
 		loadDefaults();
 		reload();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void loadDefaults() {
 		try (InputStream input = getClass().getResourceAsStream("/" + name)) {
 			if (input == null) {
@@ -61,8 +65,10 @@ public class Configuration {
 				}
 			}
 
-			defaults = (Map<String, Object>) yaml.loadAs(input, Map.class);
-			defaults = resolveNestedMaps(defaults);
+			@SuppressWarnings({"null", "unchecked"})
+			@NonNull
+			Map<String, Object> rawMap = (Map<String, Object>) yaml.loadAs(input, Map.class);
+			defaults = resolveNestedMaps(rawMap);
 		} catch (IOException closeError) {
 			closeError.printStackTrace();
 		}
@@ -103,10 +109,13 @@ public class Configuration {
 	private void resolveNestedMaps(Map<String, Object> root, String path, Map<String, Object> element) {
 		for (Entry<String, Object> entry : element.entrySet()) {
 			String newPath = (path.isEmpty() ? entry.getKey() : path + "." + entry.getKey());
-			if (entry.getValue() instanceof Map) {
-				resolveNestedMaps(root, newPath, (Map<String, Object>) entry.getValue());
-			} else {
-				root.put(newPath, entry.getValue());
+			if (newPath == null) continue;
+
+			Object value = entry.getValue();
+			if (value instanceof Map) {
+				resolveNestedMaps(root, newPath, (Map<String, Object>) value);
+			} else if (value != null) {
+				root.put(newPath, value);
 			}
 		}
 	}
@@ -146,7 +155,7 @@ public class Configuration {
 		}
 	}
 
-	public boolean containsKey(@NonNull String key) {
+	public boolean containsKey(String key) {
 		if (defaultsBacked) {
 			return defaults.containsKey(key);
 		} else {
@@ -155,7 +164,6 @@ public class Configuration {
 	}
 
 	@SuppressWarnings("unchecked")
-	@NonNullByDefault
 	public <T> T getValue(String key, Class<T> clazz) {
 		Object obj = properties.get(key);
 
@@ -177,7 +185,6 @@ public class Configuration {
 	}
 
 	@SuppressWarnings("unchecked")
-	@NonNullByDefault
 	private <T> T getDefault(String key, Class<T> clazz) {
 		Object def = defaults.get(key);
 		if (def == null) {
@@ -189,38 +196,49 @@ public class Configuration {
 		return (T) def;
 	}
 
-	@NonNullByDefault
 	public Object get(String key) {
 		return getValue(key, Object.class);
 	}
 
-	@NonNullByDefault
 	public String getString(String key) {
 		return getValue(key, String.class);
 	}
 
-	@NonNullByDefault
 	public int getInteger(String key) {
 		return getValue(key, Integer.class).intValue();
 	}
 
-	@NonNullByDefault
 	public boolean getBoolean(String key) {
 		return getValue(key, Boolean.class).booleanValue();
 	}
 
-	@NonNullByDefault
 	public double getDouble(String key) {
 		return getValue(key, Double.class).doubleValue();
 	}
 
-	public Set<Map.Entry<String, Object>> getValues() {
-		HashSet<Map.Entry<String, Object>> values = new HashSet<>(defaults.entrySet());
-		values.addAll(properties.entrySet());
-		return Collections.unmodifiableSet(values);
+	@SuppressWarnings("null")
+	public Set<Map.Entry<String, Object>> getValues(boolean deep) {
+		if (deep) {
+			HashSet<Map.Entry<String, Object>> values = new HashSet<>(properties.entrySet());
+			values.addAll(defaults.entrySet());
+			return Collections.unmodifiableSet(values);
+		} else {
+			HashSet<Map.Entry<String, Object>> values = new HashSet<>();
+			for (Map.Entry<String, Object> value : properties.entrySet()) {
+				if (!value.getKey().contains(".")) {
+					values.add(value);
+				}
+			}
+			for (Map.Entry<String, Object> def : defaults.entrySet()) {
+				if (!def.getKey().contains(".")) {
+					values.add(def);
+				}
+			}
+			return Collections.unmodifiableSet(values);
+		}
 	}
 
-	public Object set(@NonNull String key, @NonNull Object value) {
+	public @Nullable Object set(String key, Object value) {
 		if (defaultsBacked && !defaults.containsKey(key)) {
 			throw new IllegalConfigurationAccessException("");
 		}
@@ -234,7 +252,7 @@ public class Configuration {
 		return previous;
 	}
 
-	public Object setMap(@NonNull String key, @NonNull Map<String, Object> value) {
+	public @Nullable Object setMap(String key, Map<String, Object> value) {
 		Object previous = remove(key);
 		properties.put(key, value);
 		resolveNestedMaps(properties, key, value);
@@ -242,7 +260,7 @@ public class Configuration {
 		return previous;
 	}
 
-	private Object remove(@NonNull String key) {
+	private @Nullable Object remove(String key) {
 		Object previous = properties.remove(key);
 		if (previous instanceof Map) {
 			Map<?, ?> map = (Map<?, ?>) previous;
