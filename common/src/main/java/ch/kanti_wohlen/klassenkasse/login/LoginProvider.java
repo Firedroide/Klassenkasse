@@ -3,6 +3,7 @@ package ch.kanti_wohlen.klassenkasse.login;
 import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
 
@@ -53,5 +54,5 @@ public interface LoginProvider {
 	 *             The error is {@link NetworkError#INVALID_LOGIN} if the credentials were wrong,
 	 *             {@link NetworkError#UNKNOWN_ERROR} otherwise.
 	 */
-	String logIn(String username, String credentials, boolean isToken) throws LoginServerException;
+	@Nullable String logIn(String username, String credentials, boolean isToken) throws LoginServerException;
 }
