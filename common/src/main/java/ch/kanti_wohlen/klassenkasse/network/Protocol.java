@@ -46,8 +46,9 @@ public final class Protocol {
 		packet(67, PacketRoles.class);
 		packet(68, PacketEMailAddresses.class);
 		packet(69, PacketLoginToken.class);
-		packet(70, PacketAccepted.class);
-		packet(71, PacketErrorEncountered.class);
+		packet(70, PacketPacketAccepted.class);
+		packet(71, PacketActionAccepted.class);
+		packet(72, PacketErrorEncountered.class);
 
 		// Class actions
 		action(0, ActionClassCreated.class);

@@ -5,7 +5,7 @@ import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.SERVER_TO_CLIENT)
-public class PacketAccepted extends Packet {
+public class PacketPacketAccepted extends Packet {
 
 	public enum Type {
 		CLASS, USER, PAYMENT;
@@ -15,9 +15,9 @@ public class PacketAccepted extends Packet {
 	private int clientId;
 	private int serverId;
 
-	public PacketAccepted() {}
+	public PacketPacketAccepted() {}
 
-	public PacketAccepted(Type dataType, int clientId, int serverId) {
+	public PacketPacketAccepted(Type dataType, int clientId, int serverId) {
 		this.dataType = dataType;
 		this.clientId = clientId;
 		this.serverId = serverId;
