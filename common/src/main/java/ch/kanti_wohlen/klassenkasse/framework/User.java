@@ -8,17 +8,19 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
 /**
- * Represents a user, which can be a student, a teacher or an administrator.<br>
- * A {@code User} is uniquely identifiable by its ID and its E-Mail address.<br>
- * <br>
- * Every user has a {@link Role} assigned to it and must be in a
- * {@link StudentClass}.<br>
- * Administrators and the like shall be in the {@link StudentClass} with the ID
- * 0, which will not be displayed.
+ * Represents a user, which can be a student, a teacher or an administrator.
+ * <p>
+ * A {@code User} is uniquely identifiable by its ID or its E-Mail address.
+ * Every user has a {@link Role} assigned to it and must be in a {@link StudentClass}.
+ * </p>
+ * <p>
+ * Administrators and the like shall be in the {@link StudentClass} with the ID 0,
+ * which will not be displayed.
+ * </p>
  * 
  * @author Roger Baumgartner
  */
-public class User {
+public class User implements LocallyIdentifiable<Integer> {
 
 	public static enum NamingMode {
 		FIRST_NAME_FIRST,
@@ -101,7 +103,9 @@ public class User {
 	 * 
 	 * @return the local ID
 	 */
-	public int getLocalId() {
+	@SuppressWarnings("null")
+	@Override
+	public Integer getLocalId() {
 		return id;
 	}
 
@@ -188,8 +192,7 @@ public class User {
 	}
 
 	/**
-	 * Sets the stored {@link Role} ID by looking up the
-	 * {@linkplain Role#getLocalId() localID} of a {@code Role}.
+	 * Sets the stored {@link Role} ID by looking up the {@linkplain Role#getLocalId() localID} of a {@code Role}.
 	 * 
 	 * @param newRole
 	 *            the {@code Role}, cannot be null
@@ -272,8 +275,7 @@ public class User {
 	}
 
 	/**
-	 * Gets the {@code User}'s full name, using the formatting given by a
-	 * {@link NamingMode}.
+	 * Gets the {@code User}'s full name, using the formatting given by a {@link NamingMode}.
 	 * 
 	 * @param namingMode
 	 *            the {@code NamingMode} to be used when creating the full name.
@@ -306,8 +308,7 @@ public class User {
 	/**
 	 * Sets a new E-Mail address for this {@code User}.
 	 * <p>
-	 * Please note that the E-Mail address should be unique. However, this
-	 * method does not check if it really is unique.
+	 * Please note that the E-Mail address should be unique. However, this method does not check if it really is unique.
 	 * </p>
 	 * 
 	 * @param newEMailAddress
@@ -325,8 +326,8 @@ public class User {
 	/**
 	 * Gets the last calculated balance of this {@code User}.
 	 * <p>
-	 * After adding or altering payments, this value may be incorrect. To update
-	 * the balance, use {@link #recalculateBalance(Host, boolean)}
+	 * After adding or altering payments, this value may be incorrect. To update the balance, use
+	 * {@link #recalculateBalance(Host, boolean)}
 	 * </p>
 	 * 
 	 * @return the cached balance
@@ -341,8 +342,7 @@ public class User {
 	 * @param host
 	 *            the host from which the {@link Payment}s are looked up
 	 * @param updateClass
-	 *            whether the class balance should be updated. Use {@code false}
-	 *            for bulk updates
+	 *            whether the class balance should be updated. Use {@code false} for bulk updates
 	 * @return the calculated balance
 	 */
 	public MonetaryValue recalculateBalance(@NonNull Host host, boolean updateClass) {

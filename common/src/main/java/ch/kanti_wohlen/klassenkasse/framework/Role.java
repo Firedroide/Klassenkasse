@@ -7,7 +7,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
-public class Role {
+public class Role implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 	private final String name;
@@ -21,7 +21,9 @@ public class Role {
 		perms = new HashSet<String>(Arrays.asList(permissions.split(",")));
 	}
 
-	public int getLocalId() {
+	@SuppressWarnings("null")
+	@Override
+	public Integer getLocalId() {
 		return id;
 	}
 

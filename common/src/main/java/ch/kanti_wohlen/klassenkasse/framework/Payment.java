@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
 @NonNullByDefault
-public class Payment {
+public class Payment implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 
@@ -29,7 +29,9 @@ public class Payment {
 		this.value = value;
 	}
 
-	public int getLocalId() {
+	@SuppressWarnings("null")
+	@Override
+	public Integer getLocalId() {
 		return id;
 	}
 
