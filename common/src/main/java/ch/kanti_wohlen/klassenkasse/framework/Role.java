@@ -32,19 +32,21 @@ public class Role implements LocallyIdentifiable<Integer> {
 	}
 
 	public boolean hasPermission(String permission) {
-		if (permission.isEmpty() || ".".equals("permission")) {
+		if (permission.isEmpty() || permission.startsWith(".") || permission.endsWith(".")) {
 			throw new IllegalArgumentException("Illegal permission " + String.valueOf(permission));
 		}
 
-		if (perms.contains(permission)) return true;
-		if ("*".equals(permission)) return false; // Was wildcard check and didn't return true
-
-		int dotIndex = permission.lastIndexOf(".");
-		if (dotIndex == -1) return hasPermission("*");
-
-		String formerWildcardPerm = permission.substring(0, dotIndex);
-		if (formerWildcardPerm == null) throw new IllegalStateException("Substring function returned null.");
-		return hasPermission(formerWildcardPerm);
+		if (perms.contains("*")) return true;
+		for (String perm : perms) {
+			if (permission.startsWith(perm)) {
+				if (permission.length() == perm.length()) {
+					return true;
+				} else if (permission.charAt(perm.length()) == '.') {
+					return true;
+				}
+ 			}
+		}
+		return false;
 	}
 
 	public String getAllPermissions() {
