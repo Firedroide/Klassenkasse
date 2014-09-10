@@ -1,8 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.framework;
 
+import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.action.Action;
@@ -31,57 +32,58 @@ import ch.kanti_wohlen.klassenkasse.login.LoginProvider;
  * 
  * @author Roger Baumgartner
  */
+@NonNullByDefault
 public interface Host {
 
-	@NonNull String getName();
+	String getName();
 
-	@NonNull LoginProvider getLoginProvider();
+	LoginProvider getLoginProvider();
 
-	@NonNull IdProvider getIdProvider();
+	IdProvider getIdProvider();
 
-	@NonNull IdMapper getNewIdMapper();
+	IdMapper getIdMapper();
 
 	// Classes
-	@NonNull Map<Integer, StudentClass> getClasses();
+	Map<Integer, StudentClass> getClasses();
 
 	@Nullable StudentClass getClassById(int classId);
 
-	void updateClass(@NonNull StudentClass studentClass, boolean removed);
+	void updateClass(StudentClass studentClass, boolean removed);
 
 	// Users
-	@NonNull Map<Integer, User> getUsers();
+	Map<Integer, User> getUsers();
 
-	@NonNull Map<Integer, User> getUsersByClass(int classId);
+	Map<Integer, User> getUsersByClass(int classId);
 
-	@NonNull Map<Integer, User> getUsersWithPayment(int paymentId);
+	Map<Integer, User> getUsersWithPayment(int paymentId);
 
 	@Nullable User getUserById(int userId);
 
-	void updateUser(@NonNull User user, boolean removed);
+	void updateUser(User user, boolean removed);
 
 	// Payments
-	@NonNull Map<Integer, Payment> getPayments();
+	Map<Integer, Payment> getPayments();
 
-	@NonNull Map<Integer, Payment> getPaymentsByUser(int userId);
+	Map<Integer, Payment> getPaymentsByUser(int userId);
 
 	@Nullable Payment getPaymentById(int paymentId);
 
-	void updatePayment(@NonNull Payment payment, boolean removed);
+	void updatePayment(Payment payment, boolean removed);
 
 	// Payment-Users
-	void addUsersToPayment(@NonNull Payment payment, User[] users);
+	void addUsersToPayment(Payment payment, Collection<User> users);
 
-	void removeUsersFromPayment(@NonNull Payment payment, User[] users);
+	void removeUsersFromPayment(Payment payment, Collection<User> users);
 
 	// Roles
-	@NonNull Map<Integer, Role> getRoles();
+	Map<Integer, Role> getRoles();
 
 	@Nullable Role getRoleById(int roleId);
 
 	// Actions
 	@Nullable Action getActionById(long actionId);
 
-	void addAction(@NonNull Action action, User user);
+	void addAction(Action action);
 
-	void setActionUndone(@NonNull Action action, boolean undone);
+	void setActionUndone(Action action, boolean undone);
 }
