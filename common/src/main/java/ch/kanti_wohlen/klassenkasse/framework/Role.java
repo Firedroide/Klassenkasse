@@ -1,6 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.framework;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +50,24 @@ public class Role implements LocallyIdentifiable<Integer> {
 		return false;
 	}
 
-	public String getAllPermissions() {
+	public boolean hasAnySubpermission(String permission) {
+		if (hasPermission(permission)) return true;
+
+		for (String perm : perms) {
+			if (perm.startsWith(permission)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@SuppressWarnings("null")
+	public Set<String> getPermissions() {
+		return Collections.unmodifiableSet(perms);
+	}
+
+	public String getPermissionsString() {
 		return permString;
 	}
 }
