@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.util;
 
+import java.text.NumberFormat;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 /**
@@ -91,7 +93,8 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 
 	/**
 	 * Returns only the cents part of this {@code MonetaryValue}.
-	 * Will become negative if the whole expression is negative.
+	 * Will become negative if the whole expression is negative, so that adding the francs and cents results in the
+	 * origial value.
 	 * <p>
 	 * <b>Examples:</b>
 	 * </p>
@@ -305,8 +308,9 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 		StringBuilder out = new StringBuilder();
 		if (prefix) out.append("Fr. ");
 
-		out.append(getFrancs()).append(".");
-		out.append(String.format("%02d", getCents()));
+		out.append(NumberFormat.getIntegerInstance().format(getFrancs()));
+		out.append(".");
+		out.append(String.format("%02d", Math.abs(getCents())));
 		return out.toString();
 	}
 
