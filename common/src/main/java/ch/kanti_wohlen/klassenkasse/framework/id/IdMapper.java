@@ -21,7 +21,7 @@ public abstract class IdMapper {
 
 	public abstract void mapAction(long localId, long serverId);
 
-	public static final IdMapper NULL_MAPPER = new IdMapper() {
+	public static final IdMapper SELF_MAPPER = new IdMapper() {
 
 		@Override
 		public void mapUser(int localId, int serverId) {}
