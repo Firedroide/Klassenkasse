@@ -350,7 +350,7 @@ public class User implements LocallyIdentifiable<Integer> {
 
 		MonetaryValue result = new MonetaryValue(0);
 		for (Payment payment : payments.values()) {
-			result = result.add(payment.getMonetaryValue());
+			result = result.add(payment.getValue());
 		}
 		balance = result;
 

@@ -11,20 +11,20 @@ public class Payment implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 
-	private Date paymentDate;
+	private Date date;
 	private String description;
 	private MonetaryValue value;
 
 	public Payment(Host host, Date date, String description, MonetaryValue value) {
 		id = host.getIdProvider().generatePaymentId();
-		this.paymentDate = date;
+		this.date = date;
 		this.description = description;
 		this.value = value;
 	}
 
 	public Payment(int id, Date date, String description, MonetaryValue value) {
 		this.id = id;
-		this.paymentDate = date;
+		this.date = date;
 		this.description = description;
 		this.value = value;
 	}
@@ -35,30 +35,30 @@ public class Payment implements LocallyIdentifiable<Integer> {
 		return id;
 	}
 
-	public Date getPaymentDate() {
-		return paymentDate;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setPaymentDate(Date newPaymentDate) {
-		paymentDate = newPaymentDate;
+	public void setDate(Date newDate) {
+		date = newDate;
 	}
 
-	public String getPaymentDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setPaymentDescription(String newDescription) {
+	public void setDescription(String newDescription) {
 		if (newDescription.isEmpty()) {
 			throw new IllegalArgumentException("Description cannot be an empty String.");
 		}
 		description = newDescription;
 	}
 
-	public MonetaryValue getMonetaryValue() {
+	public MonetaryValue getValue() {
 		return value;
 	}
 
-	public void setMonetaryValue(MonetaryValue newValue) {
+	public void setValue(MonetaryValue newValue) {
 		value = newValue;
 	}
 }
