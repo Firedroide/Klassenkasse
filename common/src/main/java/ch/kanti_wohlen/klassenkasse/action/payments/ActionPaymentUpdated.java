@@ -10,7 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import ch.kanti_wohlen.klassenkasse.action.ActionCreationException;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Payment;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
@@ -23,22 +23,22 @@ public class ActionPaymentUpdated extends ActionPayment {
 	public ActionPaymentUpdated(@NonNull Host host, Payment payment, Date newDate, String newDescription, MonetaryValue newValue) {
 		super(host, payment);
 
-		date = (newDate != null) ? newDate : payment.getPaymentDate();
-		description = (newDescription != null) ? newDescription : payment.getPaymentDescription();
-		value = (newValue != null) ? newValue : payment.getMonetaryValue();
+		date = (newDate != null) ? newDate : payment.getDate();
+		description = (newDescription != null) ? newDescription : payment.getDescription();
+		value = (newValue != null) ? newValue : payment.getValue();
 	}
 
 	public ActionPaymentUpdated(@NonNull Host host) {
 		super(host);
 	}
 
-	public ActionPaymentUpdated(long id) {
-		super(id);
+	public ActionPaymentUpdated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) throws ActionCreationException {
-		int paymentId = idMapper.getPaymentMapping(buf.readInt());
+	public void readData(ByteBuf buf, Host host) throws ActionCreationException {
+		int paymentId = host.getIdMapper().getPaymentMapping(buf.readInt());
 		payment = host.getPayments().get(paymentId);
 		if (payment == null) {
 			throw new ActionCreationException("Inexistant payment (id = " + paymentId + ")");
@@ -55,7 +55,7 @@ public class ActionPaymentUpdated extends ActionPayment {
 		checkState(false);
 
 		swap(payment);
-		host.updatePayment(payment, true);
+		host.updatePayment(payment, false);
 	}
 
 	@Override
@@ -64,23 +64,32 @@ public class ActionPaymentUpdated extends ActionPayment {
 		checkState(true);
 
 		swap(payment);
-		host.updatePayment(payment, true);
+		host.updatePayment(payment, false);
+	}
+
+	public @NonNull Payment getUpdatedPayment() {
+		Payment payment = assertNotNull(this.payment);
+		Date date = assertNotNull(this.date);
+		String description = assertNotNull(this.description);
+		MonetaryValue value = assertNotNull(this.value);
+
+		return new Payment(payment.getLocalId(), date, description, value);
 	}
 
 	private void swap(@NonNull Payment payment) {
 		applied = !applied;
 
-		Date oldDate = payment.getPaymentDate();
-		String oldDescription = payment.getPaymentDescription();
-		MonetaryValue oldValue = payment.getMonetaryValue();
+		Date oldDate = payment.getDate();
+		String oldDescription = payment.getDescription();
+		MonetaryValue oldValue = payment.getValue();
 
 		Date date = assertNotNull(this.date);
 		String description = assertNotNull(this.description);
 		MonetaryValue value = assertNotNull(this.value);
 
-		payment.setPaymentDate(date);
-		payment.setPaymentDescription(description);
-		payment.setMonetaryValue(value);
+		payment.setDate(date);
+		payment.setDescription(description);
+		payment.setValue(value);
 
 		this.date = oldDate;
 		this.description = oldDescription;

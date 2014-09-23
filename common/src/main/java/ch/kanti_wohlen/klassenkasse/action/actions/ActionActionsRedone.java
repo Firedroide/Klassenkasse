@@ -1,9 +1,12 @@
 package ch.kanti_wohlen.klassenkasse.action.actions;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import ch.kanti_wohlen.klassenkasse.action.Action;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 
 public class ActionActionsRedone extends ActionActions {
 
@@ -15,8 +18,8 @@ public class ActionActionsRedone extends ActionActions {
 		super(host);
 	}
 
-	public ActionActionsRedone(long id) {
-		super(id);
+	public ActionActionsRedone(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override

@@ -1,11 +1,13 @@
 package ch.kanti_wohlen.klassenkasse.action.classes;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
@@ -21,21 +23,23 @@ public class ActionClassCreated extends ActionClass {
 		super(host);
 	}
 
-	public ActionClassCreated(long id) {
-		super(id);
+	@Deprecated
+	public ActionClassCreated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 		isRestore = true;
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
+	public void readData(ByteBuf buf, Host host) {
 		int clientClassId = buf.readInt();
 		String className = BufferUtil.readString(buf);
 
 		if (isRestore) {
-			studentClass = new StudentClass(clientClassId, className, MonetaryValue.ZERO);
+			studentClass = new StudentClass(clientClassId, className, MonetaryValue.ZERO, MonetaryValue.ZERO);
 		} else {
-			studentClass = new StudentClass(host, className);
-			idMapper.mapClass(clientClassId, studentClass.getLocalId());
+			StudentClass studentClass = new StudentClass(host, className);
+			host.getIdMapper().mapClass(clientClassId, studentClass.getLocalId());
+			this.studentClass = studentClass;
 		}
 	}
 

@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Payment;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
@@ -23,13 +23,14 @@ public class ActionPaymentCreated extends ActionPayment {
 		super(host);
 	}
 
-	public ActionPaymentCreated(long id) {
-		super(id);
+	@Deprecated
+	public ActionPaymentCreated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 		isRestore = true;
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
+	public void readData(ByteBuf buf, Host host) {
 		int clientPaymentId = buf.readInt();
 		Date date = new Date(buf.readLong());
 		MonetaryValue value = new MonetaryValue(buf.readLong());
@@ -38,8 +39,9 @@ public class ActionPaymentCreated extends ActionPayment {
 		if (isRestore) {
 			payment = new Payment(clientPaymentId, date, description, value);
 		} else {
-			payment = new Payment(host, date, description, value);
-			idMapper.mapPayment(clientPaymentId, payment.getLocalId());
+			Payment payment = new Payment(host, date, description, value);
+			host.getIdMapper().mapPayment(clientPaymentId, payment.getLocalId());
+			this.payment = payment;
 		}
 	}
 

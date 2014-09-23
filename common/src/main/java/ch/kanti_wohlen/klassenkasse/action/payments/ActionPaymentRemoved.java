@@ -1,11 +1,13 @@
 package ch.kanti_wohlen.klassenkasse.action.payments;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Payment;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 
 public class ActionPaymentRemoved extends ActionPayment {
 
@@ -17,13 +19,13 @@ public class ActionPaymentRemoved extends ActionPayment {
 		super(host);
 	}
 
-	public ActionPaymentRemoved(long id) {
-		super(id);
+	public ActionPaymentRemoved(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
-		int paymentId = idMapper.getPaymentMapping(buf.readInt());
+	public void readData(ByteBuf buf, Host host) {
+		int paymentId = host.getIdMapper().getPaymentMapping(buf.readInt());
 		payment = host.getPayments().get(paymentId);
 	}
 

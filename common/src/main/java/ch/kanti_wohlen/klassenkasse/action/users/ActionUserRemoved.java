@@ -1,11 +1,12 @@
 package ch.kanti_wohlen.klassenkasse.action.users;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.User;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 
 public class ActionUserRemoved extends ActionUser {
 
@@ -17,13 +18,13 @@ public class ActionUserRemoved extends ActionUser {
 		super(host);
 	}
 
-	public ActionUserRemoved(long id) {
-		super(id);
+	public ActionUserRemoved(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
-		int userId = idMapper.getUserMapping(buf.readInt());
+	public void readData(ByteBuf buf, Host host) {
+		int userId = host.getIdMapper().getUserMapping(buf.readInt());
 		user = host.getUserById(userId);
 	}
 

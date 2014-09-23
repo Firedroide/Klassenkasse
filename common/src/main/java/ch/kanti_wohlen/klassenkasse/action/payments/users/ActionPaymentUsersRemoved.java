@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.action.payments.users;
 
+import java.util.Collection;
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import ch.kanti_wohlen.klassenkasse.framework.Host;
@@ -8,7 +11,7 @@ import ch.kanti_wohlen.klassenkasse.framework.User;
 
 public class ActionPaymentUsersRemoved extends ActionPaymentUsers {
 
-	public ActionPaymentUsersRemoved(@NonNull Host host, Payment payment, User[] users) {
+	public ActionPaymentUsersRemoved(@NonNull Host host, Payment payment, Collection<User> users) {
 		super(host, payment, users);
 	}
 
@@ -16,13 +19,14 @@ public class ActionPaymentUsersRemoved extends ActionPaymentUsers {
 		super(host);
 	}
 
-	public ActionPaymentUsersRemoved(long id) {
-		super(id);
+	public ActionPaymentUsersRemoved(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
 	public void apply(Host host) {
 		Payment payment = assertNotNull(this.payment);
+		Collection<User> users = assertNotNull(this.users);
 		checkState(false);
 
 		host.removeUsersFromPayment(payment, users);
@@ -32,6 +36,7 @@ public class ActionPaymentUsersRemoved extends ActionPaymentUsers {
 	@Override
 	public void undo(Host host) {
 		Payment payment = assertNotNull(this.payment);
+		Collection<User> users = assertNotNull(this.users);
 		checkState(true);
 
 		host.addUsersToPayment(payment, users);

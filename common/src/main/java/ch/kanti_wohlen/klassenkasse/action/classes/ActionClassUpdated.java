@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action.classes;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -7,7 +9,7 @@ import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.action.ActionCreationException;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
+import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 
 public class ActionClassUpdated extends ActionClass {
@@ -24,13 +26,13 @@ public class ActionClassUpdated extends ActionClass {
 		super(host);
 	}
 
-	public ActionClassUpdated(long id) {
-		super(id);
+	public ActionClassUpdated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) throws ActionCreationException {
-		int classId = idMapper.getClassMapping(buf.readInt());
+	public void readData(ByteBuf buf, Host host) throws ActionCreationException {
+		int classId = host.getIdMapper().getClassMapping(buf.readInt());
 		studentClass = host.getClassById(classId);
 		if (studentClass == null) {
 			throw new ActionCreationException("Inexistant class (id = " + classId + ")");
@@ -45,7 +47,7 @@ public class ActionClassUpdated extends ActionClass {
 		checkState(false);
 
 		swap(studentClass);
-		host.updateClass(studentClass, true);
+		host.updateClass(studentClass, false);
 	}
 
 	@Override
@@ -54,7 +56,14 @@ public class ActionClassUpdated extends ActionClass {
 		checkState(true);
 
 		swap(studentClass);
-		host.updateClass(studentClass, true);
+		host.updateClass(studentClass, false);
+	}
+
+	public @NonNull StudentClass getUpdatedStudentClass() {
+		StudentClass studentClass = assertNotNull(this.studentClass);
+		String name = assertNotNull(this.name);
+
+		return new StudentClass(studentClass.getLocalId(), name, studentClass.getRoundingValue(), studentClass.getBalance());
 	}
 
 	private void swap(@NonNull StudentClass studentClass) {

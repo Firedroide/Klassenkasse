@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action.users;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -22,8 +24,8 @@ public abstract class ActionUser extends Action {
 		super(host);
 	}
 
-	public ActionUser(long id) {
-		super(id);
+	public ActionUser(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	public User getUser() {

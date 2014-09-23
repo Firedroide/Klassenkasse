@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action.users;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import io.netty.buffer.ByteBuf;
@@ -21,13 +23,15 @@ public class ActionUserCreated extends ActionUser {
 		super(host);
 	}
 
-	public ActionUserCreated(long id) {
-		super(id);
+	@Deprecated
+	public ActionUserCreated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 		isRestore = true;
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
+	public void readData(ByteBuf buf, Host host) {
+		IdMapper idMapper = host.getIdMapper();
 		int clientUserId = buf.readInt();
 		int classId = idMapper.getClassMapping(buf.readInt());
 		int roleId = buf.readInt();
@@ -39,8 +43,9 @@ public class ActionUserCreated extends ActionUser {
 		if (isRestore) {
 			user = new User(clientUserId, classId, roleId, firstName, lastName, eMail, value);
 		} else {
-			user = new User(host, classId, roleId, firstName, lastName, eMail);
+			User user = new User(host, classId, roleId, firstName, lastName, eMail);
 			idMapper.mapUser(clientUserId, user.getLocalId());
+			this.user = user;
 		}
 	}
 

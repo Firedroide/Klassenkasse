@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action.users;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -11,6 +13,7 @@ import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
 import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
+import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
 public class ActionUserUpdated extends ActionUser {
 
@@ -34,12 +37,13 @@ public class ActionUserUpdated extends ActionUser {
 		super(host);
 	}
 
-	public ActionUserUpdated(long id) {
-		super(id);
+	public ActionUserUpdated(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) throws ActionCreationException {
+	public void readData(ByteBuf buf, Host host) throws ActionCreationException {
+		IdMapper idMapper = host.getIdMapper();
 		int userId = idMapper.getUserMapping(buf.readInt());
 		user = host.getUserById(userId);
 		if (user == null) {
@@ -59,7 +63,7 @@ public class ActionUserUpdated extends ActionUser {
 		checkState(false);
 
 		swap(user);
-		host.updateUser(user, true);
+		host.updateUser(user, false);
 	}
 
 	@Override
@@ -68,7 +72,17 @@ public class ActionUserUpdated extends ActionUser {
 		checkState(true);
 
 		swap(user);
-		host.updateUser(user, true);
+		host.updateUser(user, false);
+	}
+
+	public @NonNull User getUpdatedUser() {
+		User user = assertNotNull(this.user);
+		String firstName = assertNotNull(this.firstName);
+		String lastName = assertNotNull(this.lastName);
+		String eMailAddress = assertNotNull(this.eMailAddress);
+		MonetaryValue balance = assertNotNull(user.getBalance());
+
+		return new User(user.getLocalId(), classId, roleId, firstName, lastName, eMailAddress, balance);
 	}
 
 	private void swap(@NonNull User user) {

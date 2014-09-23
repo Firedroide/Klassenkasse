@@ -1,6 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.action.payments.users;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -15,27 +18,28 @@ import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 
 public abstract class ActionPaymentUsers extends ActionPayment {
 
-	protected @Nullable User[] users;
+	protected @Nullable Collection<User> users;
 
-	public ActionPaymentUsers(@NonNull Host host, Payment payment, User[] users) {
+	public ActionPaymentUsers(@NonNull Host host, Payment payment, Collection<User> users) {
 		super(host, payment);
-		this.users = users;
+		this.users = Collections.unmodifiableCollection(users);
 	}
 
 	public ActionPaymentUsers(@NonNull Host host) {
 		super(host);
 	}
 
-	public ActionPaymentUsers(long id) {
-		super(id);
+	public ActionPaymentUsers(long id, User creator, @NonNull Date date) {
+		super(id, creator, date);
 	}
 
-	public User[] getUsers() {
+	public Collection<User> getUsers() {
 		return users;
 	}
 
 	@Override
-	public void readData(ByteBuf buf, Host host, IdMapper idMapper) {
+	public void readData(ByteBuf buf, Host host) {
+		IdMapper idMapper = host.getIdMapper();
 		int paymentId = idMapper.getPaymentMapping(buf.readInt());
 		List<User> userList = new ArrayList<User>(buf.readableBytes() / 4);
 		while (buf.isReadable(4)) {
@@ -44,13 +48,13 @@ public abstract class ActionPaymentUsers extends ActionPayment {
 		}
 
 		payment = host.getPayments().get(paymentId);
-		this.users = userList.toArray(new User[0]);
+		this.users = Collections.unmodifiableCollection(userList);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
 		Payment payment = assertNotNull(this.payment);
-		User[] users = assertNotNull(this.users);
+		Collection<User> users = assertNotNull(this.users);
 
 		buf.writeInt(payment.getLocalId());
 		for (User user : users) {
