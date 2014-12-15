@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>ch.kanti_wohlen.klassenkasse</groupId>
+		<artifactId>Klassenkasse</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>webstart</artifactId>
+	<name>Klassenkasse/Webstart</name>
+	<url>localhost</url>
+	<packaging>war</packaging>
+
+	<description>Some files to convert the client to a webstart application.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>client</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.mojo.webstart</groupId>
+			<artifactId>webstart-jnlp-servlet</artifactId>
+			<version>1.0-6.0.02_ea_b02.2</version>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<finalName>Klassenkasse-webstart</finalName>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copyToGlobalTarget</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>./../target</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources</directory>
+									<includes>
+										<include>Klassenkasse.jnlp</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>dependency-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<!-- Copy the webstart bundle in as a resource before packaging starts. -->
+						<phase>copy-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>someGroupId</groupId>
+							<artifactId>sample-jnlp1</artifactId>
+							<version>1.0</version>
+							<type>zip</type>
+						</artifactItem>
+						<artifactItem>
+							<groupId>someGroupId</groupId>
+							<artifactId>sample-jnlp2</artifactId>
+							<version>1.0</version>
+							<type>zip</type>
+						</artifactItem>
+					</artifactItems>
+					<outputDirectory>${project.build.directory}/${project.build.finalName}/webstart</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-beta-6</version>
+				<executions>
+					<execution>
+						<id>webstart</id>
+						<goals>
+							<goal>jnlp-single</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<filenameMapping>simple</filenameMapping>
+							<templateDirectory>${project.basedir}/src/main/jnlp</templateDirectory>
+							<workDirectory>${project.build.directory}/jnlp</workDirectory>
+							<libPath>lib</libPath>
+							<jnlp>
+								<outputFile>Klassenkasse.jnlp</outputFile>
+								<mainClass>ch.kanti_wohlen.klassenkasse.KlassenkassenClient</mainClass>
+							</jnlp>
+							<outputJarVersions>true</outputJarVersions>
+							<verbose>true</verbose>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>webstart-test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<url>http://127.0.0.1:8080/manager/text</url>
+							<path>/klassenkasse</path>
+							<username>maven</username>
+							<password>maven</password>
+							<warFile>${project.build.directory}/${project.build.finalName}.war</warFile>
+						</configuration>
+						<executions>
+							<execution>
+								<id>tomcat-deploy</id>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+								<phase>install</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

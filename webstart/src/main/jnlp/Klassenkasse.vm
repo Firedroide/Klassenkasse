@@ -1,0 +1,26 @@
+<jnlp spec="6.0+" codebase="${env.HOST}" href="Klassenkasse.jnlp">
+	<information>
+		<title>Klassenkasse</title>
+		<vendor>Kantonsschule Wohlen</vendor>
+		<homepage href="http://www.kanti-wohlen.ch/" />
+
+		<!-- TODO!! <icon href="images/swingset2.jpg" /> 
+		<icon kind="splash" href="images/splash.gif" /> -->
+		<offline-allowed />
+		<shortcut online="true" install="false">
+			<desktop />
+			<menu />
+		</shortcut>
+	</information>
+	<update check="background" policy="always" />
+	<security>
+		<all-permissions />
+	</security>
+	<resources>
+		<j2se version="1.7+" />
+		<jar href="lib/KlassenkassenClient.jar" main="true" />
+	</resources>
+	<application-desc main-class="ch.kanti_wohlen.klassenkasse.client.Klassenkasse"> <!-- TODO -->
+		<argument>webstart</argument>
+	</application-desc>
+</jnlp>
