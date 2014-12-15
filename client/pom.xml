@@ -21,19 +21,7 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
-		<!-- Network -->
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty.version}</version>
-		</dependency>
-
 		<!-- User Interface -->
-		<dependency>
-			<groupId>com.seaglasslookandfeel</groupId>
-			<artifactId>seaglasslookandfeel</artifactId>
-			<version>0.2</version>
-		</dependency>
 		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout-swing</artifactId>
@@ -50,10 +38,23 @@
 			<version>2.5.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.jidesoft</groupId>
+			<artifactId>jide-oss</artifactId>
+			<version>3.6.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.toedter</groupId>
 			<artifactId>jcalendar</artifactId>
 			<version>1.4</version>
 		</dependency>
+
+		<!-- Printing -->
+		<!-- Not yet used -->
+		<!-- <dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.8.6</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>

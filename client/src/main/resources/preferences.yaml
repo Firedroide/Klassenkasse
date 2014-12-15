@@ -1,0 +1,16 @@
+printUserFooterNote: false
+printOnePagePerUser: true
+userNamePreference: 'FIRST_NAME_FIRST'
+
+monetaryValues:
+  colors:
+    high: 0x000000
+    medium: 0xFF6600
+    low: 0xFF0000
+
+  class:
+    high: 0
+    low: 0
+  user:
+    high: 0
+    low: 0
