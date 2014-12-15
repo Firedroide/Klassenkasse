@@ -3,6 +3,7 @@ package ch.kanti_wohlen.klassenkasse.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +26,6 @@ import ch.kanti_wohlen.klassenkasse.ui.util.FontProvider;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
 import com.camick.swing.WrapLayout;
-
-import java.awt.Font;
 
 public class HomePanel extends JPanel implements Scrollable {
 

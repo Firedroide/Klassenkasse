@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.network;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageDecoder;
+
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +12,6 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketDisconnect;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketLogin;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageDecoder;
 
 public class LoginHandler extends MessageToMessageDecoder<Packet> {
 

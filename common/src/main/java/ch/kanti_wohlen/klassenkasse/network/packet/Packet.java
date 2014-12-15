@@ -1,11 +1,12 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.PacketCreationException;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
-import io.netty.buffer.ByteBuf;
 
 public abstract class Packet {
 

@@ -17,12 +17,10 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.DumperOptions.FlowStyle;
-
-import ch.kanti_wohlen.klassenkasse.util.IllegalConfigurationAccessException;
 
 public class FileConfiguration extends Configuration {
 

@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.test;
 
+import static org.junit.Assert.fail;
+
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +15,6 @@ import org.reflections.Reflections;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
 import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType;
-import static org.junit.Assert.*;
 
 public class PacketTest {
 

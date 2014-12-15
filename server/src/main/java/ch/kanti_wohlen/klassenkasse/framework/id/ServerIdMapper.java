@@ -1,6 +1,5 @@
 package ch.kanti_wohlen.klassenkasse.framework.id;
 
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 import ch.kanti_wohlen.klassenkasse.util.BiMap;
 
 public class ServerIdMapper extends IdMapper {

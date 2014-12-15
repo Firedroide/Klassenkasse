@@ -1,9 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.network;
 
-import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
 

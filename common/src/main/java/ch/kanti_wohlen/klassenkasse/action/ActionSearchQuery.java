@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Date;
@@ -19,7 +21,6 @@ import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
 import ch.kanti_wohlen.klassenkasse.util.BiMap;
-import io.netty.buffer.ByteBuf;
 
 @NonNullByDefault
 public class ActionSearchQuery implements Cloneable {

@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +11,6 @@ import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
-import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.SERVER_TO_CLIENT)
 public class PacketStudentClasses extends Packet {

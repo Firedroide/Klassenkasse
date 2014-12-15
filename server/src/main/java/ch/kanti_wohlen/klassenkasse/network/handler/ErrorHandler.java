@@ -1,9 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
-import java.util.logging.Logger;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.util.logging.Logger;
 
 public class ErrorHandler extends SimpleChannelInboundHandler<Object> {
 

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.action.paymentUsers.ActionPaymentUsers;
 import ch.kanti_wohlen.klassenkasse.database.ActionsSection;

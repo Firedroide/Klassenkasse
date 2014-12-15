@@ -1,10 +1,11 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.util.logging.Logger;
 
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketDisconnect;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
  * Handles {@linkplain PacketDisconnectHandler disconnect packets} sent by the client.

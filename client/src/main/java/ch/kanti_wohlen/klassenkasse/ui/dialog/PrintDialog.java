@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -42,8 +43,6 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
 import ch.kanti_wohlen.klassenkasse.ui.MainWindow;
 import ch.kanti_wohlen.klassenkasse.util.Configuration;
-
-import javax.swing.BoxLayout;
 
 public class PrintDialog extends JDialog implements ActionListener {
 

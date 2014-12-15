@@ -1,8 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
-import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.BOTH_WAYS)
 public class PacketHandshake extends Packet {

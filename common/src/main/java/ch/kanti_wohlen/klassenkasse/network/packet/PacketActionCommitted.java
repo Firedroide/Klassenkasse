@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +16,6 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 import ch.kanti_wohlen.klassenkasse.network.PacketCreationException;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
-import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.CLIENT_TO_SERVER)
 public class PacketActionCommitted extends Packet {

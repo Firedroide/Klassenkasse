@@ -2,8 +2,8 @@ package ch.kanti_wohlen.klassenkasse.action.actions;
 
 import io.netty.buffer.ByteBuf;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;

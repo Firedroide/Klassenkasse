@@ -1,12 +1,13 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import ch.kanti_wohlen.klassenkasse.action.ActionSearchQuery;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
-import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.CLIENT_TO_SERVER)
 public class PacketDataRequest extends Packet {

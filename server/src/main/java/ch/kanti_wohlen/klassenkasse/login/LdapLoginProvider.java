@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
+import ch.kanti_wohlen.klassenkasse.framework.User;
+import ch.kanti_wohlen.klassenkasse.server.Server;
+import ch.kanti_wohlen.klassenkasse.util.Configuration;
+import ch.kanti_wohlen.klassenkasse.util.SubConfiguration;
+
 import com.unboundid.ldap.sdk.BindResult;
 import com.unboundid.ldap.sdk.DereferencePolicy;
 import com.unboundid.ldap.sdk.Filter;
@@ -16,12 +22,6 @@ import com.unboundid.ldap.sdk.SearchRequest;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
-
-import ch.kanti_wohlen.klassenkasse.framework.Host;
-import ch.kanti_wohlen.klassenkasse.framework.User;
-import ch.kanti_wohlen.klassenkasse.server.Server;
-import ch.kanti_wohlen.klassenkasse.util.Configuration;
-import ch.kanti_wohlen.klassenkasse.util.SubConfiguration;
 
 /**
  * An implementation of the {@link LoginProvider} interface for an {@code Active Directory} domain controller.

@@ -1,5 +1,11 @@
 package ch.kanti_wohlen.klassenkasse.network;
 
+import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelPipeline;
+import io.netty.handler.ssl.SslHandler;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,11 +25,6 @@ import ch.kanti_wohlen.klassenkasse.network.handler.PacketHandshakeHandler;
 import ch.kanti_wohlen.klassenkasse.network.handler.PacketLoginHandler;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketHandshake;
 import ch.kanti_wohlen.klassenkasse.server.Server;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.ChannelHandler.Sharable;
-import io.netty.handler.ssl.SslHandler;
 
 @Sharable
 public class ServerChannelHandler extends ChannelInboundHandlerAdapter {

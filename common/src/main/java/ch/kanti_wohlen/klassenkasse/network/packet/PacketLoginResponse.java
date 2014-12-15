@@ -1,11 +1,12 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import io.netty.buffer.ByteBuf;
+
 import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
-import io.netty.buffer.ByteBuf;
 
 @PacketType(Way.SERVER_TO_CLIENT)
 public class PacketLoginResponse extends Packet {

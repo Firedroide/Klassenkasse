@@ -1,5 +1,10 @@
 package ch.kanti_wohlen.klassenkasse.framework;
 
+import static ch.kanti_wohlen.klassenkasse.util.PermissionsHelper.canView;
+import static ch.kanti_wohlen.klassenkasse.util.PermissionsHelper.checkQuery;
+import static ch.kanti_wohlen.klassenkasse.util.PermissionsHelper.checkUpdatePermission;
+import static ch.kanti_wohlen.klassenkasse.util.PermissionsHelper.hasPermission;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +26,6 @@ import ch.kanti_wohlen.klassenkasse.login.LoginProvider;
 import ch.kanti_wohlen.klassenkasse.server.Server;
 import ch.kanti_wohlen.klassenkasse.util.PaymentHelper;
 import ch.kanti_wohlen.klassenkasse.util.PermissionsException;
-import static ch.kanti_wohlen.klassenkasse.util.PermissionsHelper.*;
 
 /**
  * A {@link Host} which is backed by a {@link Database} and performs permissions checks on all operations.

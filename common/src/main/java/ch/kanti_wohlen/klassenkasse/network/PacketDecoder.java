@@ -1,5 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -9,9 +13,6 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketDisconnect;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketHandshake;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 

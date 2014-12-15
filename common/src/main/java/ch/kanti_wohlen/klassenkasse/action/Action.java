@@ -1,12 +1,13 @@
 package ch.kanti_wohlen.klassenkasse.action;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.action.actions.ActionActions;
 import ch.kanti_wohlen.klassenkasse.action.actions.ActionActionsUndone;
 import ch.kanti_wohlen.klassenkasse.action.classes.ActionClass;

@@ -14,6 +14,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -21,22 +28,14 @@ import ch.kanti_wohlen.klassenkasse.action.UpdateType;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Payment;
 import ch.kanti_wohlen.klassenkasse.framework.User;
+import ch.kanti_wohlen.klassenkasse.ui.components.PaymentTablePanel;
+import ch.kanti_wohlen.klassenkasse.ui.components.SearchTextField;
+import ch.kanti_wohlen.klassenkasse.ui.dialog.Dialogs;
 import ch.kanti_wohlen.klassenkasse.ui.util.ConditionalFormatting;
 import ch.kanti_wohlen.klassenkasse.ui.util.FontProvider;
 import ch.kanti_wohlen.klassenkasse.ui.util.IconProvider;
-import net.miginfocom.swing.MigLayout;
-import ch.kanti_wohlen.klassenkasse.ui.components.PaymentTablePanel;
-import ch.kanti_wohlen.klassenkasse.ui.dialog.Dialogs;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 import ch.kanti_wohlen.klassenkasse.util.PermissionsHelper;
-
-import javax.swing.SwingConstants;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
-import ch.kanti_wohlen.klassenkasse.ui.components.SearchTextField;
 
 public class UserPanel extends JPanel {
 

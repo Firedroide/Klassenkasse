@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,8 +11,6 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketAccepted;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketActionCommitted;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketErrorEncountered;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 public class PacketActionCommittedHandler extends SimpleChannelInboundHandler<PacketActionCommitted> {
 

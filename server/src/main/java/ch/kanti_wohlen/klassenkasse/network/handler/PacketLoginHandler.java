@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -9,12 +12,10 @@ import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.login.LoginServerException;
 import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
-import ch.kanti_wohlen.klassenkasse.network.packet.PacketLoginResponse;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketErrorEncountered;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketLogin;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketLoginResponse;
 import ch.kanti_wohlen.klassenkasse.server.Server;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 // TODO: Prevent login spamming
 public class PacketLoginHandler extends SimpleChannelInboundHandler<PacketLogin> {

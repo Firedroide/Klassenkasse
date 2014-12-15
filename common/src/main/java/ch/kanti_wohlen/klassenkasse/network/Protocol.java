@@ -1,12 +1,36 @@
 package ch.kanti_wohlen.klassenkasse.network;
 
 import ch.kanti_wohlen.klassenkasse.action.Action;
-import ch.kanti_wohlen.klassenkasse.action.actions.*;
-import ch.kanti_wohlen.klassenkasse.action.classes.*;
-import ch.kanti_wohlen.klassenkasse.action.paymentUsers.*;
-import ch.kanti_wohlen.klassenkasse.action.payments.*;
-import ch.kanti_wohlen.klassenkasse.action.users.*;
-import ch.kanti_wohlen.klassenkasse.network.packet.*;
+import ch.kanti_wohlen.klassenkasse.action.actions.ActionActionsRedone;
+import ch.kanti_wohlen.klassenkasse.action.actions.ActionActionsUndone;
+import ch.kanti_wohlen.klassenkasse.action.classes.ActionClassCreated;
+import ch.kanti_wohlen.klassenkasse.action.classes.ActionClassRemoved;
+import ch.kanti_wohlen.klassenkasse.action.classes.ActionClassUpdated;
+import ch.kanti_wohlen.klassenkasse.action.paymentUsers.ActionPaymentUsersAdded;
+import ch.kanti_wohlen.klassenkasse.action.paymentUsers.ActionPaymentUsersRemoved;
+import ch.kanti_wohlen.klassenkasse.action.payments.ActionPaymentCreated;
+import ch.kanti_wohlen.klassenkasse.action.payments.ActionPaymentRemoved;
+import ch.kanti_wohlen.klassenkasse.action.payments.ActionPaymentUpdated;
+import ch.kanti_wohlen.klassenkasse.action.users.ActionUserCreated;
+import ch.kanti_wohlen.klassenkasse.action.users.ActionUserRemoved;
+import ch.kanti_wohlen.klassenkasse.action.users.ActionUserUpdated;
+import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketAccepted;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketActionCommitted;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketActions;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketClassVariables;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketDataRequest;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketDisconnect;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketErrorEncountered;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketHandshake;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketLogin;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketLoginResponse;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketPayments;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketPrintingInformation;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketRoles;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketStudentClasses;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketUsernames;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketUsers;
 import ch.kanti_wohlen.klassenkasse.util.BiMap;
 
 /**

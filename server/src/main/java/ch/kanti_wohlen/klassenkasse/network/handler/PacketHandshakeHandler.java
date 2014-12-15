@@ -1,12 +1,13 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.util.logging.Logger;
 
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
 import ch.kanti_wohlen.klassenkasse.network.ServerChannelHandler;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketHandshake;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 public class PacketHandshakeHandler extends SimpleChannelInboundHandler<PacketHandshake> {
 

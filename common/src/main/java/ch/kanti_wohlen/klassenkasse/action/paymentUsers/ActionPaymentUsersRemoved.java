@@ -1,8 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.action.paymentUsers;
 
-import java.util.Collection;
-
 import io.netty.buffer.ByteBuf;
+
+import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 

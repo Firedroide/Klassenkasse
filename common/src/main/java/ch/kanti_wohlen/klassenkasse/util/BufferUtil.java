@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.util;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.util.CharsetUtil;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,9 +12,6 @@ import javax.imageio.ImageIO;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.util.CharsetUtil;
 
 public final class BufferUtil {
 

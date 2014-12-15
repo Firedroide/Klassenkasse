@@ -1,5 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.action.paymentUsers;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,7 +11,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
-import io.netty.buffer.ByteBuf;
 import ch.kanti_wohlen.klassenkasse.action.Action;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Payment;

@@ -1,5 +1,8 @@
 package ch.kanti_wohlen.klassenkasse.network.handler;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,18 +25,16 @@ import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
 import ch.kanti_wohlen.klassenkasse.network.packet.Packet;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketActions;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketClassVariables;
-import ch.kanti_wohlen.klassenkasse.network.packet.PacketUsernames;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketDataRequest;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketDataRequest.RequestType;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketErrorEncountered;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketPayments;
-import ch.kanti_wohlen.klassenkasse.network.packet.PacketDataRequest;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketPrintingInformation;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketRoles;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketStudentClasses;
+import ch.kanti_wohlen.klassenkasse.network.packet.PacketUsernames;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketUsers;
-import ch.kanti_wohlen.klassenkasse.network.packet.PacketDataRequest.RequestType;
 import ch.kanti_wohlen.klassenkasse.server.Server;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 public class PacketDataRequestHandler extends SimpleChannelInboundHandler<PacketDataRequest> {
 

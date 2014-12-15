@@ -1,5 +1,6 @@
 package ch.kanti_wohlen.klassenkasse.test;
 
+import static org.junit.Assert.fail;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.Modifier;
@@ -12,7 +13,6 @@ import org.reflections.Reflections;
 import ch.kanti_wohlen.klassenkasse.action.Action;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
-import static org.junit.Assert.*;
 
 public class ActionTest {
 
