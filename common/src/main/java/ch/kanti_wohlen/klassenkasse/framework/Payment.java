@@ -2,31 +2,33 @@ package ch.kanti_wohlen.klassenkasse.framework;
 
 import java.util.Date;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
-@NonNullByDefault
-public class Payment implements LocallyIdentifiable<Integer> {
+public final class Payment implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 
 	private Date date;
 	private String description;
 	private MonetaryValue value;
+	private MonetaryValue rounding;
 
-	public Payment(Host host, Date date, String description, MonetaryValue value) {
+	public Payment(Host host, Date date, String description, MonetaryValue value, MonetaryValue rounding) {
 		id = host.getIdProvider().generatePaymentId();
 		this.date = date;
 		this.description = description;
 		this.value = value;
+		this.rounding = rounding;
 	}
 
-	public Payment(int id, Date date, String description, MonetaryValue value) {
+	public Payment(int id, Date date, String description, MonetaryValue value, MonetaryValue rounding) {
 		this.id = id;
 		this.date = date;
 		this.description = description;
 		this.value = value;
+		this.rounding = rounding;
 	}
 
 	@SuppressWarnings("null")
@@ -60,5 +62,27 @@ public class Payment implements LocallyIdentifiable<Integer> {
 
 	public void setValue(MonetaryValue newValue) {
 		value = newValue;
+	}
+
+	public MonetaryValue getRoundingValue() {
+		return rounding;
+	}
+
+	public void setRoundingValue(MonetaryValue newRoundingValue) {
+		rounding = newRoundingValue;
+	}
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (obj instanceof Payment) {
+			return id == ((Payment) obj).id;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
 	}
 }

@@ -1,63 +1,30 @@
 package ch.kanti_wohlen.klassenkasse.action.classes;
 
-import java.util.Date;
-
-import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import io.netty.buffer.ByteBuf;
+import ch.kanti_wohlen.klassenkasse.action.UpdateType;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
-import ch.kanti_wohlen.klassenkasse.framework.User;
-import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
+@NonNullByDefault
 public class ActionClassCreated extends ActionClass {
 
-	private boolean isRestore = false;
-
-	public ActionClassCreated(@NonNull Host host, StudentClass studentClass) {
-		super(host, studentClass);
+	public ActionClassCreated(StudentClass studentClass) {
+		super(studentClass, UpdateType.CREATION);
+		checkStudentClass(studentClass);
 	}
 
-	public ActionClassCreated(@NonNull Host host) {
-		super(host);
-	}
-
-	@Deprecated
-	public ActionClassCreated(long id, User creator, @NonNull Date date) {
-		super(id, creator, date);
-		isRestore = true;
-	}
-
-	@Override
-	public void readData(ByteBuf buf, Host host) {
-		int clientClassId = buf.readInt();
-		String className = BufferUtil.readString(buf);
-
-		if (isRestore) {
-			studentClass = new StudentClass(clientClassId, className, MonetaryValue.ZERO, MonetaryValue.ZERO);
-		} else {
-			StudentClass studentClass = new StudentClass(host, className);
-			host.getIdMapper().mapClass(clientClassId, studentClass.getLocalId());
-			this.studentClass = studentClass;
+	private static void checkStudentClass(StudentClass studentClass) {
+		if (!studentClass.getRawBalance().equals(MonetaryValue.ZERO)) {
+			throw new IllegalArgumentException("Cannot create a StudentClass with a balance other than 0");
+		} else if (!studentClass.getRoundingValue().equals(MonetaryValue.ZERO)) {
+			throw new IllegalArgumentException("Cannot create a StudentClass with a rounding value other than 0");
 		}
 	}
 
-	@Override
-	public void apply(Host host) {
-		StudentClass studentClass = assertNotNull(this.studentClass);
-		checkState(false);
-
-		host.updateClass(studentClass, false);
-		applied = true;
-	}
-
-	@Override
-	public void undo(Host host) {
-		StudentClass studentClass = assertNotNull(this.studentClass);
-		checkState(true);
-
-		host.updateClass(studentClass, true);
-		applied = false;
+	public ActionClassCreated(Host host, ByteBuf buffer) {
+		super(host, buffer, UpdateType.CREATION);
 	}
 }

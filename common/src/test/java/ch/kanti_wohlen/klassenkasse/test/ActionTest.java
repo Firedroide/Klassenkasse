@@ -1,7 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.Set;
@@ -12,7 +12,6 @@ import org.reflections.Reflections;
 import ch.kanti_wohlen.klassenkasse.action.Action;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
-
 import static org.junit.Assert.*;
 
 public class ActionTest {
@@ -53,17 +52,9 @@ public class ActionTest {
 		for (Class<? extends Action> actionClass : getAvailableActionClasses()) {
 			try {
 				// Gets the constructor for the action
-				Constructor<? extends Action> constructor = actionClass.getConstructor(Host.class);
-				// Constructs a new instance of the action
-				constructor.newInstance(new FakeHost());
-			} catch (NoSuchMethodException | IllegalAccessException e) {
+				actionClass.getConstructor(Host.class, ByteBuf.class);
+			} catch (NoSuchMethodException e) {
 				fail("Action " + actionClass.getSimpleName() + " did not have a Host-only constructor defined.");
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				fail("Action " + actionClass.getSimpleName() + " could not be instantiated (abstract class ?).");
-				e.printStackTrace();
-			} catch (InvocationTargetException | ExceptionInInitializerError e) {
-				fail("Action " + actionClass.getSimpleName() + " threw an exception in its no-args constructor.");
 				e.printStackTrace();
 			}
 		}

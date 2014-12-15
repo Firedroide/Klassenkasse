@@ -1,11 +1,10 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.StudentClass;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
@@ -15,42 +14,44 @@ import io.netty.buffer.ByteBuf;
 @PacketType(Way.SERVER_TO_CLIENT)
 public class PacketStudentClasses extends Packet {
 
-	private Collection<StudentClass> studentClasses;
+	private Map<Integer, StudentClass> studentClasses;
 
 	public PacketStudentClasses() {
-		studentClasses = Collections.emptyList();
+		studentClasses = Collections.emptyMap();
 	}
 
-	public PacketStudentClasses(StudentClass... studentClasses) {
-		this.studentClasses = Arrays.asList(studentClasses);
+	public PacketStudentClasses(Map<Integer, StudentClass> studentClasses) {
+		this.studentClasses = Collections.unmodifiableMap(new HashMap<>(studentClasses));
 	}
 
-	public PacketStudentClasses(Collection<StudentClass> studentClasses) {
-		this.studentClasses = new ArrayList<>(studentClasses);
-	}
-
-	public Collection<StudentClass> getStudentClasses() {
-		return Collections.unmodifiableCollection(studentClasses);
+	public Map<Integer, StudentClass> getStudentClasses() {
+		return studentClasses;
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
-		List<StudentClass> resultList = new ArrayList<>();
+	public void readData(ByteBuf buf, Host host) {
+		Map<Integer, StudentClass> resultMap = new HashMap<>();
 		while (buf.isReadable()) {
 			int studentId = buf.readInt();
 			String name = BufferUtil.readString(buf);
+			MonetaryValue rounding = new MonetaryValue(buf.readLong());
 			MonetaryValue balance = new MonetaryValue(buf.readLong());
-			resultList.add(new StudentClass(studentId, name, balance));
+
+			resultMap.put(studentId, new StudentClass(studentId, name, rounding, balance));
 		}
-		studentClasses = Collections.unmodifiableList(resultList);
+
+		studentClasses = Collections.unmodifiableMap(resultMap);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		for (StudentClass studentClass : studentClasses) {
+		for (StudentClass studentClass : studentClasses.values()) {
+			if (studentClass == null) continue;
+
 			buf.writeInt(studentClass.getLocalId());
 			BufferUtil.writeString(buf, studentClass.getName());
-			buf.writeLong(studentClass.getBalance().getCentValue());
+			buf.writeLong(studentClass.getRoundingValue().getCentValue());
+			buf.writeLong(studentClass.getRawBalance().getCentValue());
 		}
 	}
 }

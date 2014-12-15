@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
@@ -27,20 +28,27 @@ public class FileConfiguration extends Configuration {
 
 	private final Yaml yaml;
 	private final String name;
+	private final File file;
 	private final boolean defaultsBacked;
 	private Map<String, Object> properties;
 	private Map<String, Object> defaults;
 
 	public FileConfiguration(String name, boolean defaultsBacked) {
+		this(name, new File(name), defaultsBacked);
+	}
+
+	public FileConfiguration(String name, File file, boolean defaultsBacked) {
 		if (name.isEmpty()) throw new IllegalArgumentException("name was null or empty");
 
 		this.name = name;
+		this.file = file;
 		this.defaultsBacked = defaultsBacked;
 
 		DumperOptions options = new DumperOptions();
 		options.setIndent(2);
 		options.setDefaultFlowStyle(FlowStyle.BLOCK);
 		options.setDefaultScalarStyle(ScalarStyle.PLAIN);
+		options.setLineBreak(LineBreak.getPlatformLineBreak());
 		yaml = new Yaml(options);
 
 		defaults = new HashMap<>();
@@ -73,12 +81,13 @@ public class FileConfiguration extends Configuration {
 	}
 
 	public void reload() {
-		File file = new File(name);
 		if (!file.exists()) {
 			createDefaults();
+			return;
 		} else if (file.isDirectory()) {
 			file.delete();
 			createDefaults();
+			return;
 		}
 
 		try (FileInputStream input = new FileInputStream(file)) {
@@ -99,18 +108,20 @@ public class FileConfiguration extends Configuration {
 
 	private void createDefaults() {
 		try (InputStream in = getClass().getResourceAsStream("/" + name)) {
-			if (defaultsBacked && in == null) {
-				throw new IllegalStateException("Defaults file was not found in the classpath");
+			if (in == null) {
+				if (defaultsBacked) {
+					throw new IllegalStateException("Defaults file was not found in the classpath");
+				} else {
+					return;
+				}
 			}
 
-			try (OutputStream out = new FileOutputStream(name)) {
-				if (in != null) {
-					// Copy file from JAR to the properties file
-					byte[] buf = new byte[4096];
-					int len = 0;
-					while ((len = in.read(buf)) >= 0) {
-						out.write(buf, 0, len);
-					}
+			try (OutputStream out = new FileOutputStream(file)) {
+				// Copy file from JAR to the properties file
+				byte[] buf = new byte[4096];
+				int len = 0;
+				while ((len = in.read(buf)) >= 0) {
+					out.write(buf, 0, len);
 				}
 			} catch (FileNotFoundException isDirectory) {
 				// We checked isDirectory earlier, won't happen.
@@ -124,10 +135,11 @@ public class FileConfiguration extends Configuration {
 		}
 	}
 
-	// TODO
 	public void save() {
-		try (FileWriter writer = new FileWriter(name)) {
-			Map<String, Object> packed = packMap(this, null);
+		Map<String, Object> packed = packMap(this, null);
+		if (packed.isEmpty()) return;
+
+		try (FileWriter writer = new FileWriter(file)) {
 			yaml.dump(packed, writer);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -149,7 +161,7 @@ public class FileConfiguration extends Configuration {
 			if (obj == null) {
 				obj = def;
 				properties.put(key, def);
-			} else if (!clazz.isAssignableFrom(obj.getClass())) {
+			} else if (!clazz.isInstance(obj)) {
 				obj = def;
 				properties.put(key, def);
 			}
@@ -167,7 +179,7 @@ public class FileConfiguration extends Configuration {
 		Object def = defaults.get(key);
 		if (def == null) {
 			throw new IllegalConfigurationAccessException("Inexistant property: " + String.valueOf(key));
-		} else if (!clazz.isAssignableFrom(def.getClass())) {
+		} else if (!clazz.isInstance(def)) {
 			throw new IllegalConfigurationAccessException("Wrong type for key \"" + String.valueOf(key)
 					+ "\", requested " + clazz.getSimpleName() + ", was " + def.getClass().getSimpleName());
 		}

@@ -1,5 +1,6 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import io.netty.buffer.ByteBuf;
 
@@ -7,32 +8,32 @@ import io.netty.buffer.ByteBuf;
 public class PacketHandshake extends Packet {
 
 	private short protocolVersion;
-	private boolean https;
+	private boolean ssl;
 
 	public PacketHandshake() {}
 
-	public PacketHandshake(short protocolVersion, boolean https) {
+	public PacketHandshake(short protocolVersion, boolean useSSL) {
 		this.protocolVersion = protocolVersion;
-		this.https = https;
+		this.ssl = useSSL;
 	}
 
 	public short getProtocolVersion() {
 		return protocolVersion;
 	}
 
-	public boolean usingHttps() {
-		return https;
+	public boolean useSSL() {
+		return ssl;
+	}
+
+	@Override
+	public void readData(ByteBuf buf, Host host) {
+		protocolVersion = buf.readShort();
+		ssl = buf.readBoolean();
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
 		buf.writeShort(protocolVersion);
-		buf.writeBoolean(https);
-	}
-
-	@Override
-	public void readData(ByteBuf buf) {
-		protocolVersion = buf.readShort();
-		https = buf.readBoolean();
+		buf.writeBoolean(ssl);
 	}
 }

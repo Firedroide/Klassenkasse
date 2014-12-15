@@ -1,38 +1,26 @@
 package ch.kanti_wohlen.klassenkasse.action.actions;
 
-import java.util.Date;
+import io.netty.buffer.ByteBuf;
 
-import org.eclipse.jdt.annotation.NonNull;
+import java.util.Collection;
 
-import ch.kanti_wohlen.klassenkasse.action.Action;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import ch.kanti_wohlen.klassenkasse.action.BaseAction;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
-import ch.kanti_wohlen.klassenkasse.framework.User;
 
+@NonNullByDefault
 public class ActionActionsUndone extends ActionActions {
 
-	public ActionActionsUndone(@NonNull Host host, Action... actions) {
-		super(host, actions);
+	public ActionActionsUndone(Collection<Long> actionIds) {
+		super(actionIds, true);
 	}
 
-	public ActionActionsUndone(@NonNull Host host) {
-		super(host);
+	public ActionActionsUndone(BaseAction... actions) {
+		super(actions, true);
 	}
 
-	public ActionActionsUndone(long id, User creator, @NonNull Date date) {
-		super(id, creator, date);
-	}
-
-	@Override
-	public void apply(Host host) {
-		checkState(false);
-		setActionsUndone(host, true);
-		applied = true;
-	}
-
-	@Override
-	public void undo(Host host) {
-		checkState(true);
-		setActionsUndone(host, false);
-		applied = false;
+	public ActionActionsUndone(Host host, ByteBuf buffer) {
+		super(host, buffer, true);
 	}
 }

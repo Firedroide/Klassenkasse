@@ -1,5 +1,6 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
 
@@ -7,12 +8,12 @@ import io.netty.buffer.ByteBuf;
 public class PacketLogin extends Packet {
 
 	private String usr;
-	private String pwd;
+	private char[] pwd;
 	private boolean token;
 
 	public PacketLogin() {}
 
-	public PacketLogin(String username, String password, boolean isToken) {
+	public PacketLogin(String username, char[] password, boolean isToken) {
 		// Make sure no NULL characters or whitespaces are smuggled in
 		usr = username.trim();
 		pwd = password;
@@ -20,17 +21,22 @@ public class PacketLogin extends Packet {
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
+	public void readData(ByteBuf buf, Host host) {
 		usr = BufferUtil.readString(buf);
-		pwd = BufferUtil.readString(buf);
 		token = buf.readBoolean();
+		pwd = new char[buf.readableBytes() / 2];
+		for (int i = 0; buf.isReadable(2); ++i) {
+			pwd[i] = buf.readChar();
+		}
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
 		BufferUtil.writeString(buf, usr);
-		BufferUtil.writeString(buf, pwd);
 		buf.writeBoolean(token);
+		for (char c : pwd) {
+			buf.writeChar(c);
+		}
 	}
 
 	public String getUsername() {
@@ -41,11 +47,11 @@ public class PacketLogin extends Packet {
 		usr = username;
 	}
 
-	public String getEncryptedPassword() {
+	public char[] getPassword() {
 		return pwd;
 	}
 
-	public void setEncryptedPassword(String password) {
+	public void setPassword(char[] password) {
 		pwd = password;
 	}
 

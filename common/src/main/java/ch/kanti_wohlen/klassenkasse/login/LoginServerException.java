@@ -1,22 +1,30 @@
 package ch.kanti_wohlen.klassenkasse.login;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
+import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
+
+@NonNullByDefault
 public class LoginServerException extends Exception {
 
-	public LoginServerException() {}
+	private final NetworkError networkError;
 
-	public LoginServerException(String message) {
-		super(message);
-	}
-
-	public LoginServerException(Throwable cause) {
-		super(cause);
+	public LoginServerException() {
+		super();
+		this.networkError = NetworkError.INVALID_LOGIN;
 	}
 
 	public LoginServerException(String message, Throwable cause) {
 		super(message, cause);
+		this.networkError = NetworkError.UNKNOWN_ERROR;
 	}
 
-	public LoginServerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+	public LoginServerException(Throwable cause) {
+		super(cause);
+		this.networkError = NetworkError.UNKNOWN_ERROR;
+	}
+
+	public NetworkError getNetworkError() {
+		return networkError;
 	}
 }

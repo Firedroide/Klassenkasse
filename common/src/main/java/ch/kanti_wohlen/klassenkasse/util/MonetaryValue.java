@@ -1,6 +1,7 @@
 package ch.kanti_wohlen.klassenkasse.util;
 
 import java.text.NumberFormat;
+import java.util.Collection;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -228,10 +229,32 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 	 */
 	public static @NonNull MonetaryValue sumAll(MonetaryValue... values) {
 		if (values == null || values.length == 0) {
-			return new MonetaryValue(0);
+			return MonetaryValue.ZERO;
 		}
 
-		MonetaryValue result = new MonetaryValue(0);
+		MonetaryValue result = MonetaryValue.ZERO;
+		for (MonetaryValue value : values) {
+			result = result.add(value);
+		}
+		return result;
+	}
+
+	/**
+	 * Sums the values of multiple {@code MonetaryValue}s together.
+	 * 
+	 * @param values
+	 *            The {@code MonetaryValue}s to be added together. May be null or an empty {@link Collection}
+	 * @return the sum of all {@code MonetaryValue}s or a value of 0 if {@code values} is null or empty
+	 * 
+	 * @throws ArithmeticException
+	 *             if a long overflow occurs
+	 */
+	public static @NonNull MonetaryValue sumAll(Collection<MonetaryValue> values) {
+		if (values == null || values.size() == 0) {
+			return MonetaryValue.ZERO;
+		}
+
+		MonetaryValue result = MonetaryValue.ZERO;
 		for (MonetaryValue value : values) {
 			result = result.add(value);
 		}
@@ -258,7 +281,7 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 		// Overflow checking
 		if (Integer.signum(multiplier) * Long.signum(value) == -1) {
 			// Inverse signs, results in negative result
-			if ((double) Math.abs(Long.MIN_VALUE) / multiplier < Math.abs(value)) {
+			if ((double) Math.abs(Long.MIN_VALUE) / multiplier > Math.abs(value)) {
 				throw new ArithmeticException("Long overflow (multiplication of " + value + " and " + multiplier + ")");
 			}
 		} else {
@@ -281,7 +304,7 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 
 	@Override
 	public int hashCode() {
-		return (int) value;
+		return (int) (value ^ (value >>> 32));
 	}
 
 	@Override
@@ -308,7 +331,8 @@ public class MonetaryValue implements Cloneable, Comparable<MonetaryValue> {
 		StringBuilder out = new StringBuilder();
 		if (prefix) out.append("Fr. ");
 
-		out.append(NumberFormat.getIntegerInstance().format(getFrancs()));
+		if (value < 0) out.append("-");
+		out.append(NumberFormat.getIntegerInstance().format(Math.abs(getFrancs())));
 		out.append(".");
 		out.append(String.format("%02d", Math.abs(getCents())));
 		return out.toString();

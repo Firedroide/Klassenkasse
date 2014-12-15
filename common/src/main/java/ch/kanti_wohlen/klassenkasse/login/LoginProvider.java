@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
 
 /**
@@ -20,13 +21,13 @@ public interface LoginProvider {
 
 	/**
 	 * Gets a list of user names from this {@link LoginProvider} which can be used to
-	 * {@linkplain #logIn(String, String, boolean) log in}.
+	 * {@linkplain #logIn(Host, String, char[], boolean) log in}.
 	 * 
 	 * @return a {@link Collection} containing all user names of this {@code LoginProvider}
 	 * @throws LoginServerException
 	 *             if the user names could not be retrieved due to a network error.
 	 */
-	Collection<String> getUserNames() throws LoginServerException;
+	Collection<String> getUsernames() throws LoginServerException;
 
 	/**
 	 * Attempts to log in at this {@link LoginProvider}.
@@ -42,6 +43,8 @@ public interface LoginProvider {
 	 * If the login fails, a {@link LoginServerException} will be thrown.
 	 * </p>
 	 * 
+	 * @param host
+	 *            the host for which the user is to be logged in
 	 * @param username
 	 *            the name of the user to be logged in, never null
 	 * @param credentials
@@ -54,5 +57,6 @@ public interface LoginProvider {
 	 *             The error is {@link NetworkError#INVALID_LOGIN} if the credentials were wrong,
 	 *             {@link NetworkError#UNKNOWN_ERROR} otherwise.
 	 */
-	@Nullable String logIn(String username, String credentials, boolean isToken) throws LoginServerException;
+	@Nullable
+	String logIn(Host host, String username, char[] credentials, boolean isToken) throws LoginServerException;
 }

@@ -1,9 +1,9 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -11,43 +11,39 @@ import ch.kanti_wohlen.klassenkasse.action.Action;
 import ch.kanti_wohlen.klassenkasse.action.ActionCreationException;
 import ch.kanti_wohlen.klassenkasse.action.BaseAction;
 import ch.kanti_wohlen.klassenkasse.framework.Host;
-import ch.kanti_wohlen.klassenkasse.framework.id.IdMapper;
 import ch.kanti_wohlen.klassenkasse.network.PacketCreationException;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import io.netty.buffer.ByteBuf;
 
-@PacketType(Way.CLIENT_TO_SERVER)
-public class PacketActionCommitted extends Packet {
+@PacketType(Way.SERVER_TO_CLIENT)
+public class PacketActions extends Packet {
 
-	private static final int OVERHEAD = 11;
+	private static final int OVERHEAD = 24;
 
-	private Collection<BaseAction> actions;
+	private Map<Long, BaseAction> actions;
 
-	public PacketActionCommitted() {
-		this.actions = Collections.emptyList();
+	public PacketActions() {
+		actions = Collections.emptyMap();
 	}
 
-	public PacketActionCommitted(Collection<BaseAction> actions) {
-		this.actions = Collections.unmodifiableList(new ArrayList<>(actions));
+	public PacketActions(Map<Long, BaseAction> actions) {
+		this.actions = Collections.unmodifiableMap(new HashMap<>(actions));
 	}
 
-	public PacketActionCommitted(BaseAction... actions) {
-		this.actions = Collections.unmodifiableList(new ArrayList<>(Arrays.asList(actions)));
-	}
-
-	public Collection<BaseAction> getActions() {
+	public Map<Long, BaseAction> getActions() {
 		return actions;
 	}
 
 	@Override
 	public void readData(ByteBuf buf, Host host) throws PacketCreationException {
-		Collection<BaseAction> resultList = new ArrayList<>();
-		IdMapper idMapper = host.getIdMapper();
-
+		Map<Long, BaseAction> resultMap = new HashMap<>();
 		while (buf.isReadable(OVERHEAD)) {
 			byte actionType = buf.readByte();
 			short dataLength = buf.readShort();
-			long clientActionId = buf.readLong();
+			long actionId = buf.readLong();
+			int creatorId = buf.readInt();
+			Date creationDate = new Date(buf.readLong());
+			boolean applied = buf.readBoolean();
 
 			// Check the integrity of the data length
 			if (dataLength < 0) {
@@ -80,18 +76,16 @@ public class PacketActionCommitted extends Packet {
 				throw new PacketCreationException("Action control byte did not match.");
 			}
 
-			BaseAction base = new BaseAction(action, host);
-			idMapper.mapAction(clientActionId, base.getLocalId());
-
-			resultList.add(base);
+			BaseAction base = new BaseAction(action, actionId, creatorId, creationDate, applied);
+			resultMap.put(actionId, base);
 		}
 
-		actions = Collections.unmodifiableCollection(resultList);
+		actions = Collections.unmodifiableMap(resultMap);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		for (BaseAction base : actions) {
+		for (BaseAction base : actions.values()) {
 			if (base == null) continue;
 
 			// Get the action conveyed by this BaseAction
@@ -104,6 +98,9 @@ public class PacketActionCommitted extends Packet {
 
 			// Write BaseAction data
 			buf.writeLong(base.getLocalId());
+			buf.writeInt(base.getCreatorId());
+			buf.writeLong(base.getCreationDate().getTime());
+			buf.writeBoolean(base.isApplied());
 
 			// Write custom Action data
 			int startIndex = buf.writerIndex();

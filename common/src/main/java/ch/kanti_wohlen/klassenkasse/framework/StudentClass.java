@@ -1,14 +1,10 @@
 package ch.kanti_wohlen.klassenkasse.framework;
 
-import java.util.Map;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 
-// TODO: Rename?
-@NonNullByDefault
-public class StudentClass implements LocallyIdentifiable<Integer> {
+public final class StudentClass implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 
@@ -52,17 +48,39 @@ public class StudentClass implements LocallyIdentifiable<Integer> {
 		rounding = newRoundingValue;
 	}
 
-	public MonetaryValue getBalance() {
+	public MonetaryValue getRawBalance() {
 		return balance;
 	}
 
-	public MonetaryValue recalculateBalance(Host host) {
-		Map<Integer, User> users = host.getUsersByClass(id);
-		MonetaryValue result = new MonetaryValue(0);
+	public void setRawBalance(MonetaryValue newBalance) {
+		balance = newBalance;
+	}
 
-		for (User user : users.values()) {
-			result = result.add(user.getBalance());
+	public MonetaryValue getBalance() {
+		return balance.add(rounding);
+	}
+
+//	public MonetaryValue recalculateBalance(Host host) {
+//		Map<Integer, User> users = host.getUsersByClass(id);
+//		MonetaryValue result = new MonetaryValue(0);
+//
+//		for (User user : users.values()) {
+//			result = result.add(user.getBalance());
+//		}
+//		return result;
+//	}
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (obj instanceof StudentClass) {
+			return id == ((StudentClass) obj).id;
+		} else {
+			return false;
 		}
-		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
 	}
 }

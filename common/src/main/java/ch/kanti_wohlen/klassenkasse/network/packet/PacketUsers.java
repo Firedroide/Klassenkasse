@@ -1,11 +1,10 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.User;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
@@ -15,49 +14,49 @@ import io.netty.buffer.ByteBuf;
 @PacketType(Way.SERVER_TO_CLIENT)
 public class PacketUsers extends Packet {
 
-	private Collection<User> users;
+	private Map<Integer, User> users;
 
 	public PacketUsers() {
-		users = Collections.emptyList();
+		users = Collections.emptyMap();
 	}
 
-	public PacketUsers(User... users) {
-		this.users = Arrays.asList(users);
+	public PacketUsers(Map<Integer, User> users) {
+		this.users = Collections.unmodifiableMap(new HashMap<>(users));
 	}
 
-	public PacketUsers(Collection<User> users) {
-		this.users = new ArrayList<>(users);
-	}
-
-	public Collection<User> getUsers() {
-		return Collections.unmodifiableCollection(users);
+	public Map<Integer, User> getUsers() {
+		return users;
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
-		List<User> resultList = new ArrayList<>();
+	public void readData(ByteBuf buf, Host host) {
+		Map<Integer, User> resultMap = new HashMap<>();
 		while (buf.isReadable()) {
 			int userId = buf.readInt();
 			int studentClassId = buf.readInt();
 			int roleId = buf.readInt();
 			String firstName = BufferUtil.readString(buf);
 			String lastName = BufferUtil.readString(buf);
-			String eMailAddress = BufferUtil.readString(buf);
+			String username = BufferUtil.readString(buf);
 			MonetaryValue balance = new MonetaryValue(buf.readLong());
-			resultList.add(new User(userId, studentClassId, roleId, firstName, lastName, eMailAddress, balance));
+
+			resultMap.put(userId, new User(userId, studentClassId, roleId, firstName, lastName, username, balance));
 		}
-		users = Collections.unmodifiableList(resultList);
+
+		users = Collections.unmodifiableMap(resultMap);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		for (User user : users) {
+		for (User user : users.values()) {
+			if (user == null) continue;
+
 			buf.writeInt(user.getLocalId());
 			buf.writeInt(user.getStudentClassId());
 			buf.writeInt(user.getRoleId());
 			BufferUtil.writeString(buf, user.getFirstName());
 			BufferUtil.writeString(buf, user.getLastName());
-			BufferUtil.writeString(buf, user.getEMailAddress());
+			BufferUtil.writeString(buf, user.getUsername());
 			buf.writeLong(user.getBalance().getCentValue());
 		}
 	}

@@ -1,11 +1,10 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.framework.Role;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
@@ -14,42 +13,42 @@ import io.netty.buffer.ByteBuf;
 @PacketType(Way.SERVER_TO_CLIENT)
 public class PacketRoles extends Packet {
 
-	private Collection<Role> roles;
+	private Map<Integer, Role> roles;
 
 	public PacketRoles() {
-		roles = Collections.emptyList();
+		roles = Collections.emptyMap();
 	}
 
-	public PacketRoles(Role... roles) {
-		this.roles = Arrays.asList(roles);
+	public PacketRoles(Map<Integer, Role> roles) {
+		this.roles = Collections.unmodifiableMap(new HashMap<>(roles));
 	}
 
-	public PacketRoles(Collection<Role> roles) {
-		this.roles = new ArrayList<>(roles);
-	}
-
-	public Collection<Role> getRoles() {
-		return Collections.unmodifiableCollection(roles);
+	public Map<Integer, Role> getRoles() {
+		return roles;
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
-		List<Role> resultList = new ArrayList<>();
+	public void readData(ByteBuf buf, Host host) {
+		Map<Integer, Role> resultMap = new HashMap<>();
 		while (buf.isReadable()) {
 			int roleId = buf.readInt();
 			String name = BufferUtil.readString(buf);
 			String permissions = BufferUtil.readString(buf);
-			resultList.add(new Role(roleId, name, permissions));
+
+			resultMap.put(roleId, new Role(roleId, name, permissions));
 		}
-		roles = Collections.unmodifiableList(resultList);
+
+		roles = Collections.unmodifiableMap(resultMap);
 	}
 
 	@Override
 	public void writeData(ByteBuf buf) {
-		for (Role role : roles) {
+		for (Role role : roles.values()) {
+			if (role == null) continue;
+
 			buf.writeInt(role.getLocalId());
 			BufferUtil.writeString(buf, role.getName());
-			BufferUtil.writeString(buf, role.getAllPermissions());
+			BufferUtil.writeString(buf, role.getPermissionsString());
 		}
 	}
 }

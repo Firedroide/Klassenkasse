@@ -94,4 +94,9 @@ public class SubConfiguration extends Configuration {
 	public void set(String key, Object value) {
 		root.set(combinedPath(key), value);
 	}
+
+	@Override
+	public boolean containsKey(String key) {
+		return root.containsKey(combinedPath(key));
+	}
 }

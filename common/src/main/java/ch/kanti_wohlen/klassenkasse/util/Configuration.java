@@ -26,20 +26,24 @@ public abstract class Configuration {
 		return getValue(key, Object.class);
 	}
 
+	public boolean getBoolean(@NonNull String key) {
+		return getValue(key, Boolean.class).booleanValue();
+	}
+
 	public String getString(@NonNull String key) {
 		return getValue(key, String.class);
 	}
 
 	public int getInteger(@NonNull String key) {
-		return getValue(key, Integer.class).intValue();
+		return getValue(key, Number.class).intValue();
 	}
 
-	public boolean getBoolean(@NonNull String key) {
-		return getValue(key, Boolean.class).booleanValue();
+	public long getLong(@NonNull String key) {
+		return getValue(key, Number.class).longValue();
 	}
 
 	public double getDouble(@NonNull String key) {
-		return getValue(key, Double.class).doubleValue();
+		return getValue(key, Number.class).doubleValue();
 	}
 
 	public @NonNull Map<String, Configuration> getSubsections() {

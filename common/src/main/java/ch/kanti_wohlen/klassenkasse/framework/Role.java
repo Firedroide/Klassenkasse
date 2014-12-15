@@ -5,10 +5,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
-@NonNullByDefault
-public class Role implements LocallyIdentifiable<Integer> {
+public final class Role implements LocallyIdentifiable<Integer> {
 
 	private final int id;
 	private final String name;
@@ -69,5 +68,19 @@ public class Role implements LocallyIdentifiable<Integer> {
 
 	public String getPermissionsString() {
 		return permString;
+	}
+
+	@Override
+	public boolean equals(@Nullable Object obj) {
+		if (obj instanceof Role) {
+			return id == ((Role) obj).id;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
 	}
 }

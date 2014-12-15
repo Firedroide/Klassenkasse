@@ -1,5 +1,6 @@
 package ch.kanti_wohlen.klassenkasse.network.packet;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
 import ch.kanti_wohlen.klassenkasse.network.Protocol.NetworkError;
 import ch.kanti_wohlen.klassenkasse.network.packet.PacketType.Way;
 import ch.kanti_wohlen.klassenkasse.util.BufferUtil;
@@ -11,8 +12,9 @@ public class PacketErrorEncountered extends Packet {
 	private NetworkError networkError;
 	private String reason;
 
-	// TODO
-	public PacketErrorEncountered() {}
+	public PacketErrorEncountered() {
+		networkError = NetworkError.UNKNOWN_ERROR;
+	}
 
 	public PacketErrorEncountered(NetworkError networkError, String reason) {
 		this.networkError = networkError;
@@ -36,7 +38,7 @@ public class PacketErrorEncountered extends Packet {
 	}
 
 	@Override
-	public void readData(ByteBuf buf) {
+	public void readData(ByteBuf buf, Host host) {
 		networkError = BufferUtil.readEnum(buf, NetworkError.values());
 		reason = BufferUtil.readString(buf);
 	}

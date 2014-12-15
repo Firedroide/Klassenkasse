@@ -2,6 +2,8 @@ package ch.kanti_wohlen.klassenkasse.network.packet;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import ch.kanti_wohlen.klassenkasse.framework.Host;
+import ch.kanti_wohlen.klassenkasse.network.PacketCreationException;
 import ch.kanti_wohlen.klassenkasse.network.Protocol;
 import io.netty.buffer.ByteBuf;
 
@@ -15,7 +17,7 @@ public abstract class Packet {
 		return Protocol.getPacketId(this.getClass());
 	}
 
-	public abstract void readData(@NonNull ByteBuf buf);
+	public abstract void readData(@NonNull ByteBuf buf, @NonNull Host host) throws PacketCreationException;
 
 	public abstract void writeData(@NonNull ByteBuf buf);
 }
