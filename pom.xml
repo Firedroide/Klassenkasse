@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.kanti_wohlen.klassenkasse</groupId>
 	<artifactId>Klassenkasse</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Klassenkasse</name>
 	<packaging>pom</packaging>
 
