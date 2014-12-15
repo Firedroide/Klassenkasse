@@ -48,7 +48,7 @@ public final class StudentClass implements LocallyIdentifiable<Integer> {
 		rounding = newRoundingValue;
 	}
 
-	public MonetaryValue getRawBalance() {
+	public MonetaryValue getRoundedBalance() {
 		return balance;
 	}
 

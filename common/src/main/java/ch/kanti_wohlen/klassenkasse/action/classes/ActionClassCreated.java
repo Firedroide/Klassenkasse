@@ -18,7 +18,7 @@ public class ActionClassCreated extends ActionClass {
 	}
 
 	private static void checkStudentClass(StudentClass studentClass) {
-		if (!studentClass.getRawBalance().equals(MonetaryValue.ZERO)) {
+		if (!studentClass.getRoundedBalance().equals(MonetaryValue.ZERO)) {
 			throw new IllegalArgumentException("Cannot create a StudentClass with a balance other than 0");
 		} else if (!studentClass.getRoundingValue().equals(MonetaryValue.ZERO)) {
 			throw new IllegalArgumentException("Cannot create a StudentClass with a rounding value other than 0");

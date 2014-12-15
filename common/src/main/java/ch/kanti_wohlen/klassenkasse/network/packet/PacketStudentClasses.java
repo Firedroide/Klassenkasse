@@ -52,7 +52,7 @@ public class PacketStudentClasses extends Packet {
 			buf.writeInt(studentClass.getLocalId());
 			BufferUtil.writeString(buf, studentClass.getName());
 			buf.writeLong(studentClass.getRoundingValue().getCentValue());
-			buf.writeLong(studentClass.getRawBalance().getCentValue());
+			buf.writeLong(studentClass.getRoundedBalance().getCentValue());
 		}
 	}
 }

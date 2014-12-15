@@ -92,8 +92,8 @@ public class ClassPanel extends JPanel {
 
 	private void loadData(StudentClass studentClass, Host host) {
 		titleLabel.setText("Klasse " + studentClass.getName());
-		balanceLabel.setText(studentClass.getBalance().toString());
-		balanceLabel.setForeground(ConditionalFormatting.getClassColor(studentClass.getBalance()));
+		balanceLabel.setText(studentClass.getRoundedBalance().toString());
+		balanceLabel.setForeground(ConditionalFormatting.getClassColor(studentClass.getRoundedBalance()));
 		roundingLabel.setText(studentClass.getRoundingValue().toString());
 
 		Collection<User> users = host.getUsersByClass(studentClass.getLocalId()).values();

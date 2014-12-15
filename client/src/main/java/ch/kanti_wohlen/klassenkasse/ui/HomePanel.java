@@ -77,7 +77,7 @@ public class HomePanel extends JPanel implements Scrollable {
 		for (StudentClass studentClass : classes.values()) {
 			if (studentClass == null || studentClass.getLocalId() == 0) continue;
 
-			balance = balance.add(studentClass.getBalance());
+			balance = balance.add(studentClass.getRoundedBalance());
 			int classId = studentClass.getLocalId();
 			int userCount = classMap.containsKey(classId) ? classMap.get(classId) : 0;
 			ClassButton classButton = new ClassButton(mainWindow, studentClass, userCount);

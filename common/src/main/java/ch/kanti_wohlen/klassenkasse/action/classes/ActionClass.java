@@ -63,7 +63,7 @@ public abstract class ActionClass extends Action {
 		if (actualType == UpdateType.UPDATE) {
 			if (current == null) throw new IllegalStateException(); // checked
 
-			balance = current.getRawBalance();
+			balance = current.getRoundedBalance();
 			rounding = current.getRoundingValue();
 		} else {
 			balance = MonetaryValue.ZERO;

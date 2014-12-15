@@ -76,7 +76,7 @@ public class ClassesSection extends CachedDatabaseSection<Integer, StudentClass>
 			results.updateInt(1, value.getLocalId());
 			results.updateString(2, value.getName());
 			results.updateLong(3, value.getRoundingValue().getCentValue());
-			results.updateLong(4, value.getRawBalance().getCentValue());
+			results.updateLong(4, value.getRoundedBalance().getCentValue());
 			if (updateType == UpdateType.CREATION) {
 				results.updateBoolean(5, false);
 			} else if (updateType == UpdateType.REMOVAL) {

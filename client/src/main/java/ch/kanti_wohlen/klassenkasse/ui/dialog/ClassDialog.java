@@ -307,7 +307,7 @@ public class ClassDialog extends JDialog implements ActionListener {
 		List<Action> actions = new ArrayList<>();
 		int id = editingClass.getLocalId();
 		String name = checkValidity(nameField.getText());
-		StudentClass newClass = new StudentClass(id, name, editingClass.getRoundingValue(), editingClass.getRawBalance());
+		StudentClass newClass = new StudentClass(id, name, editingClass.getRoundingValue(), editingClass.getRoundedBalance());
 
 		if (isEdit) {
 			if (!newClass.getName().equals(originalName)) {
