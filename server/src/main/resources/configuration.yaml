@@ -1,0 +1,93 @@
+# KLASSENKASSEN-SERVER CONFIGURATION
+#
+# Explanations:
+# Host:	What hostname should be used. Examples: 'localhost', '192.168.1.1', '54.86.21.120', 'klassenkasse.kanti-wohlen.ch'
+# Port:	The port number that should be used, must be a number between 1 and 65535. Examples: 57065, 21, 23, 80
+# URL:	The resource location for a server. Examples: 'http://some.server.com/its/a/path', but also '54.86.21.120'
+
+# How the communicates over the network and what host & port it binds to.
+network:
+  host: 'localhost'
+  port: 57065
+  useSSL: false
+
+# How the server should authenticate its users
+authentication:
+
+  # The method to use for authentication.
+  # Can be either ldap, crowd or none
+  method: none
+
+  # Authentication via any Active Directory that supports LDAP
+  ldap:
+    host: 'localhost'
+    port: 389
+    hasEMails: false
+
+    baseDN: 'DC=INSERT HERE'
+    objectFilter: '(objectClass=person)'
+    bindUserDN: 'CN=Klassenkasse,CN=Users,DC=INSERT HERE'
+    bindUserPassword: ''
+
+  # Authentication via Atlassian Crowd
+  crowd:
+    url: 'http://localhost:8095/crowd'
+    password: 'Set a password when adding app ''klassenkasse'' to crowd and set it here.'
+
+  # No external authentication
+  # When logging in from the same machine, the user will be a SuperUser
+  none:
+    # Whether everybody should be allowed to connect
+    allowAllConnections: false
+    # A list of e-mails that can be used to login if "allowAllConnections" is set to true.
+    allowedEMails: []
+
+  # The password used for the user 'superuser'
+  # This user is used for administrative access. Keep this password secret
+  superUserPassword: 'SuperSecretPassword'
+
+# How the server should back up its data
+backups:
+  enabled: true
+
+  # In which directory the backups should be saved, can be absolute or relative
+  directory: 'backups'
+
+  intervalsInDays:
+    # Every how many days the server should create a .zip backup of the database
+    backupCreation: 7
+
+    # How old backups need to be before they get deleted
+    # Negative numbers indicate no removing of backups
+    backupRemoval: 365
+
+    # How long it should take until removed classes / users / payments should be removed from the database
+    # If an object was removed more than that value of days before and it has not been accessed since,
+    # it will be permanenty deleted from the database, including any actions associated with it.
+    oldDatabaseObjectRemoval: 90
+
+# When printing student data, there shall be a footer containing payment information.
+# This format string can contain HTML, some pre-defined variables and infinitely many user-defined variables.
+#
+# Pre-defined variables:
+# [firstname], [lastname], [username], [balance]
+#
+# User-defined variables:
+# {Insert any variable name here, less than 64 characters}
+#
+# Make completely user-defined by setting it to one user-defined variable ('{text}')
+# Make completely server-defined by not including any user-defined variables
+# Globally disable by setting it to an empty string ('')
+printingFooterFormat: |
+  <html>Zahlungsdaten:<br>
+  <br><table border="0" cellspacing="0" cellpadding="0">
+  <tr><td>IBAN:</td>                <td width=25px></td><td>{IBAN}</td></tr>
+  <tr><td>Personalien:</td>         <td></td><td>{Vorname Name}</td></tr>
+  <tr><td></td>                     <td></td><td>{Addresse}</td></tr>
+  <tr><td></td>                     <td></td><td>{PLZ Ort}</td></tr>
+  <tr><td>Zahlungszweck:</td>       <td></td><td>Einzahlung Klassenkasse</td></tr>
+  <tr><td></td>                     <td></td><td>[firstname] [lastname]</td></tr>
+  </table></html>
+
+# Prints a lot of stuff to the log file. Be warned.
+debug: false

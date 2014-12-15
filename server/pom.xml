@@ -22,28 +22,38 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
+		<!-- Login: Crowd and LDAP -->
 		<dependency>
 			<groupId>com.atlassian.crowd</groupId>
 			<artifactId>crowd-integration-client</artifactId>
 			<version>2.7.2</version>
 		</dependency>
-
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty.version}</version>
+			<groupId>com.unboundid</groupId>
+			<artifactId>unboundid-ldapsdk</artifactId>
+			<version>2.3.6</version>
 		</dependency>
 
+		<!-- Database -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
 			<version>10.10.1.1</version>
 		</dependency>
 
+		<!-- Scheduling -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>2.2.1</version>
+		</dependency>
+
+		<!-- Copy folder to .zip -->
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-zip</artifactId>
+			<version>1.8</version>
+			<type>jar</type>
 		</dependency>
 	</dependencies>
 
@@ -51,6 +61,23 @@
 		<sourceDirectory>src/main/java</sourceDirectory>
 
 		<plugins>
+			<plugin>
+				<groupId>com.github.chrischristo</groupId>
+				<artifactId>capsule-maven-plugin</artifactId>
+				<version>0.8.1</version>
+				<configuration>
+					<appClass>ch.kanti_wohlen.klassenkasse.server.Server</appClass>
+					<types>fat</types>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>2.3</version>
@@ -81,6 +108,9 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
