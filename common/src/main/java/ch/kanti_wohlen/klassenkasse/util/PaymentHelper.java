@@ -39,7 +39,7 @@ public final class PaymentHelper {
 			if (studentClass == null) throw new IllegalStateException("Inexistant StudentClass");
 
 			MonetaryValue classChange = change.multiply(entry.getValue());
-			studentClass.setRawBalance(studentClass.getRoundedBalance().add(classChange));
+			studentClass.setRoundedBalance(studentClass.getRoundedBalance().add(classChange));
 			host.updateClass(studentClass, UpdateType.UPDATE);
 		}
 	}
@@ -154,7 +154,7 @@ public final class PaymentHelper {
 			} else {
 				classBalance = studentClass.getRoundedBalance().add(payment.getValue());
 			}
-			studentClass.setRawBalance(classBalance);
+			studentClass.setRoundedBalance(classBalance);
 		}
 
 		for (StudentClass studentClass : studentClasses.values()) {

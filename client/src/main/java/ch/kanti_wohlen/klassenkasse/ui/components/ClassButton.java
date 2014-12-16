@@ -40,7 +40,7 @@ public class ClassButton extends JButton {
 		JLabel userValueLabel = new JLabel(String.valueOf(userCount));
 		informationPanel.add(userValueLabel, "cell 1 0,alignx right");
 
-		MonetaryValue balance = studentClass.getBalance();
+		MonetaryValue balance = studentClass.getRoundedBalance();
 		JLabel balanceLabel = new JLabel("Saldo:");
 		informationPanel.add(balanceLabel, "cell 0 1");
 

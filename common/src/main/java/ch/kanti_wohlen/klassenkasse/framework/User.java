@@ -7,20 +7,29 @@ import ch.kanti_wohlen.klassenkasse.util.MonetaryValue;
 /**
  * Represents a user, which can be a student, a teacher or an administrator.
  * <p>
- * A {@code User} is uniquely identifiable by its ID or its user name.
- * Every user has a {@link Role} assigned to it and must be in a {@link StudentClass}.
+ * A {@code User} is uniquely identifiable by its ID or its user name. Every user has a {@link Role} assigned to it and
+ * must be in a {@link StudentClass}.
  * </p>
  * <p>
- * Administrators and the like shall be in the {@link StudentClass} with the ID 0,
- * which will not be displayed.
+ * Administrators and the like shall be in the {@link StudentClass} with the ID 0, which will not be displayed.
  * </p>
  * 
  * @author Roger Baumgartner
  */
 public final class User implements LocallyIdentifiable<Integer> {
 
+	/**
+	 * This {@code enum} represents how a {@link User}'s name is formatted by default.
+	 */
 	public static enum NamingMode {
+		/**
+		 * Format: {@code FirstName LastName}
+		 */
 		FIRST_NAME_FIRST,
+
+		/**
+		 * Format: {@code LastName, FirstName}
+		 */
 		LAST_NAME_FIRST
 	}
 
@@ -40,17 +49,17 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * 
 	 * @param host
 	 *            the host which is used to generate a new {@code User} ID,
-	 *            cannot be null
+	 *            cannot be {@code null}
 	 * @param classId
 	 *            the ID of the {@link StudentClass} this {@code User} is in
 	 * @param roleId
 	 *            the ID of the {@link Role} this {@code User} is in
 	 * @param firstName
-	 *            the first name, cannot be null or empty
+	 *            the first name, cannot be {@code null} or empty
 	 * @param lastName
-	 *            the last name, cannot be null or empty
+	 *            the last name, cannot be {@code null} or empty
 	 * @param username
-	 *            the user name, cannot be null or empty
+	 *            the user name, cannot be {@code null} or empty
 	 */
 	public User(Host host, int classId, int roleId, String firstName, String lastName, String username) {
 		if (firstName.isEmpty()) throw new IllegalArgumentException("First name can't be empty.");
@@ -80,11 +89,11 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * @param roleId
 	 *            the ID of the {@link Role} this {@code User} is in
 	 * @param firstName
-	 *            the first name, cannot be null or empty
+	 *            the first name, cannot be {@code null} or empty
 	 * @param lastName
-	 *            the last name, cannot be null or empty
+	 *            the last name, cannot be {@code null} or empty
 	 * @param username
-	 *            the user name, cannot be null or empty
+	 *            the user name, cannot be {@code null} or empty
 	 * @param value
 	 *            the cached balance of all {@link Payment}s
 	 */
@@ -143,11 +152,11 @@ public final class User implements LocallyIdentifiable<Integer> {
 	}
 
 	/**
-	 * Sets the stored {@link StudentClass} ID by looking up the
-	 * {@linkplain StudentClass#getLocalId() localID} of a {@code StudentClass}.
+	 * Sets the stored {@link StudentClass} ID by looking up the {@linkplain StudentClass#getLocalId() localID} of a
+	 * {@code StudentClass}.
 	 * 
 	 * @param newStudentClass
-	 *            the {@code StudentClass}, cannot be null
+	 *            the {@code StudentClass}, cannot be {@code null}
 	 * 
 	 * @see #setStudentClass(int)
 	 */
@@ -200,7 +209,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * Sets the stored {@link Role} ID by looking up the {@linkplain Role#getLocalId() localID} of a {@code Role}.
 	 * 
 	 * @param newRole
-	 *            the {@code Role}, cannot be null
+	 *            the {@code Role}, cannot be {@code null}
 	 * 
 	 * @see #setRole(int)
 	 */
@@ -234,7 +243,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * Sets the first name of this {@code User}
 	 * 
 	 * @param newFirstName
-	 *            the first name, cannot be null or empty
+	 *            the first name, cannot be {@code null} or empty
 	 * @throws IllegalArgumentException
 	 *             if the first name is empty
 	 */
@@ -256,7 +265,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * Sets the last name of this {@code User}
 	 * 
 	 * @param newLastName
-	 *            the last name, cannot be null or empty
+	 *            the last name, cannot be {@code null} or empty
 	 * @throws IllegalArgumentException
 	 *             if the last name is empty
 	 */
@@ -303,7 +312,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 	/**
 	 * Gets this {@code User}'s unique user name.
 	 * 
-	 * @return this User's user name. Will not be null.
+	 * @return this User's user name. Will not be {@code null}.
 	 */
 	public String getUsername() {
 		return username;
@@ -316,7 +325,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 	 * </p>
 	 * 
 	 * @param newUsername
-	 *            the new user name, cannot be null or empty
+	 *            the new user name, cannot be {@code null} or empty
 	 * @throws IllegalArgumentException
 	 *             if the new user name is empty
 	 */
@@ -337,7 +346,8 @@ public final class User implements LocallyIdentifiable<Integer> {
 	/**
 	 * Sets the balance of this {@link User} to a new {@link MonetaryValue}.
 	 * 
-	 * @param newBalance the new balance to be used
+	 * @param newBalance
+	 *            the new balance to be used
 	 */
 	public void setBalance(MonetaryValue newBalance) {
 		balance = newBalance;
@@ -359,6 +369,7 @@ public final class User implements LocallyIdentifiable<Integer> {
 
 	/**
 	 * Gets the default {@link NamingMode} to be used when calling {@link #getFullName()}.
+	 * 
 	 * @return the default {@code NamingMode}, never {@code null}, defaults to {@link NamingMode#FIRST_NAME_FIRST}
 	 */
 	public static NamingMode getDefaultNamingMode() {
@@ -367,7 +378,9 @@ public final class User implements LocallyIdentifiable<Integer> {
 
 	/**
 	 * Sets the default {@link NamingMode} to be used when calling {@link #getFullName()}.
-	 * @param newNamingMode the new {@code NamingMode}
+	 * 
+	 * @param newNamingMode
+	 *            the new {@code NamingMode}
 	 */
 	public static void setDefaultNamingMode(NamingMode newNamingMode) {
 		defaultNamingMode = newNamingMode;
